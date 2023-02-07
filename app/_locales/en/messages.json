@@ -1,0 +1,18 @@
+{
+  "appName": {
+    "message": "<Specify the application name>",
+    "description": "Share url to Twitter"
+  },
+  "appShortName": {
+    "message": "<Specify the application short name>",
+    "description": "<The description of the application>"
+  },
+  "appDescription": {
+    "message": "<Specify the application name>",
+    "description": "<The description of the application>"
+  },
+  "browserActionTitle": {
+    "message": "<Specify the application name>",
+    "description": "<The description of the application>"
+  }
+}
