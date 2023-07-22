@@ -1,18 +1,18 @@
 {
   "appName": {
-    "message": "<Specify the application name>",
-    "description": "Share url to Twitter"
+    "message": "Web Cliper for Obsidian",
+    "description": "Web Clip a web page in Markdown and save it to Obsidian."
   },
   "appShortName": {
-    "message": "<Specify the application short name>",
-    "description": "<The description of the application>"
+    "message": "Web Cliper for Obsidian",
+    "description": "Web Clip a web page in Markdown and save it to Obsidian."
   },
   "appDescription": {
-    "message": "<Specify the application name>",
-    "description": "<The description of the application>"
+    "message": "Web Cliper for Obsidian",
+    "description": "Web Clip a web page in Markdown and save it to Obsidian."
   },
   "browserActionTitle": {
-    "message": "<Specify the application name>",
-    "description": "<The description of the application>"
+    "message": "Web Cliper for Obsidian",
+    "description": "Web Clip a web page in Markdown and save it to Obsidian."
   }
 }

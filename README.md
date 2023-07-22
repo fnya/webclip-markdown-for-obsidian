@@ -1,37 +1,13 @@
-## Firefox extensions template
+## Web Clipper for Obsidian
 
-This repository is a template for Firefox extensions.
+`Web Clipper for Obsidian` は、Firefox で動作する Obsidian 用の Web Clipper です。
 
-This template includes an extension to share URLs to Twitter.
+Web ページを Markdown の形式に変換して、Obsidian に保存します。
 
-This sample extension is built using web-ext.
+画像は Base64 でエンコードして保存します。
 
-- [Getting started with web-ext](https://extensionworkshop.com/documentation/develop/getting-started-with-web-ext/)
+これにより、画像があっても 1 つの Markdown ファイルに保存することができます。
 
-### Specify application information
+## TODO
 
-Specify your application information in the following files.
-
-- app/manifest.json
-- app/\_locales/en/messages.json
-
-### How to build
-
-The following command will create a zip file of Firefox extensions.
-
-```sh
-$ chmod +x build.sh
-$ ./build.sh
-```
-
-### Logo
-
-The Twitter logo is the official one.
-
-- [About Twitter | Our logo, brand guidelines, and Tweet tools](https://about.twitter.com/en/who-we-are/brand-toolkit)
-
-### License
-
-The code in this repository is released under the MIT License.
-
-However, the Twitter logo is subject to the terms and conditions of Twitter, Inc.
+- Twitter の埋め込み対応

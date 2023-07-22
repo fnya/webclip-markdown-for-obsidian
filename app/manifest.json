@@ -1,18 +1,30 @@
 {
-  "name": "firefox extensions template",
-  "description": "<The description of the application>",
+  "name": "Web Clipper for Obsidian",
+  "description": "Web Clip a web page in Markdown and save it to Obsidian",
   "default_locale": "en",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "manifest_version": 2,
   "icons": {
-    "48": "icons/twitter-48.png",
-    "96": "icons/twitter-96.png"
+    "48": "icons/clipper_48.png",
+    "96": "icons/clipper_96.png"
   },
-  "background": {
-    "scripts": ["background.js"]
-  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "scripts/turndown.js",
+        "scripts/buttonScripts.js",
+        "scripts/imageScripts.js",
+        "scripts/contentScript.js"
+      ]
+    }
+  ],
   "browser_action": {
-    "default_icon": "icons/twitter-32.png"
+    "browser_style": true,
+    "default_title": "Web Cliper for Obsidian",
+    "default_popup": "popup/clipper.html",
+    "default_icon": "icons/clipper_32.png"
   },
-  "permissions": ["tabs"]
+  "permissions": ["tabs", "<all_urls>"]
 }
