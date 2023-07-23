@@ -115,6 +115,18 @@ const clip = async () => {
     emDelimiter: "*",
   });
 
+  turndownService.addRule("iframeTagsReplace", {
+    filter: ["iframe"],
+    replacement: function (content, node) {
+      // Twitter の埋め込み URL を返す
+      if (node.attributes["src"].value.indexOf("twitter.com") !== -1) {
+        return `[Tweet Link](https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value})`;
+      }
+
+      return "";
+    },
+  });
+
   // img タグはルールを使わないと変換できない
   // https://github.com/mixmark-io/turndown/issues/241
   turndownService.addRule("imageTagsReplace", {
@@ -172,50 +184,48 @@ const clip = async () => {
   // Markdown に変換する
   let markdownBody = turndownService.turndown(currentElement.outerHTML);
 
-  // 画像の URL を base64 に変換するために URL を抽出する
-  const matches = markdownBody.match(/https?:\/\/([\w!\?/\-_=\.&%;])+/g);
+  // 画像の URL を抽出する
+  const imageMatches = markdownBody.match(/https?:\/\/([\w!\?/\-_=\.&%;])+/g);
 
   // 画像の URL を base64 に変換する
   try {
-    let replacedMarkdownBody;
-    if (matches) {
-      replacedMarkdownBody = await processMatches(matches, markdownBody);
-    } else {
-      replacedMarkdownBody = markdownBody;
+    if (imageMatches) {
+      markdownBody = await processMatches(imageMatches, markdownBody);
     }
-
-    // Obsidian に渡すデータを作成する
-    const fileContent =
-      "Source: " +
-      document.URL +
-      "\n" +
-      "Tags: #Firefox #ブラウザ拡張\n" +
-      "\n\n" +
-      replacedMarkdownBody;
-
-    // タイトルの正規化を行う
-    const title = document.title
-      // for Mac
-      .replaceAll(":", " ")
-      .replaceAll(".", " ")
-      // for Windows
-      .replaceAll("¥", " ")
-      .replaceAll("/", " ")
-      .replaceAll("*", " ")
-      .replaceAll("?", " ")
-      .replaceAll("<", " ")
-      .replaceAll(">", " ")
-      .replaceAll("|", " "); // OneDrive, too
-
-    // Obsidian を起動する
-    document.location.href =
-      "obsidian://new?" +
-      "name=" +
-      encodeURIComponent(title) +
-      "&content=" +
-      encodeURIComponent(fileContent) +
-      "&vault=obsidian";
   } catch (error) {
+    // エラーが出てもそのまま処理を継続する
     console.error(error);
   }
+
+  // Obsidian に渡すデータを作成する
+  const fileContent =
+    "Source: " +
+    document.URL +
+    "\n" +
+    "Tags: #Firefox #ブラウザ拡張\n" +
+    "\n\n" +
+    markdownBody;
+
+  // タイトルの正規化を行う
+  const title = document.title
+    // for Mac
+    .replaceAll(":", " ")
+    .replaceAll(".", " ")
+    // for Windows
+    .replaceAll("¥", " ")
+    .replaceAll("/", " ")
+    .replaceAll("*", " ")
+    .replaceAll("?", " ")
+    .replaceAll("<", " ")
+    .replaceAll(">", " ")
+    .replaceAll("|", " "); // OneDrive, too
+
+  // Obsidian を起動する
+  document.location.href =
+    "obsidian://new?" +
+    "&content=" +
+    encodeURIComponent(fileContent) +
+    "&vault=webclip&file=" +
+    encodeURIComponent("2023/") +
+    encodeURIComponent(title);
 };
