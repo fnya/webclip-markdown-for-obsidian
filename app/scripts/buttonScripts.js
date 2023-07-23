@@ -124,7 +124,11 @@ const clip = async (tags, defaultFolder) => {
     filter: ["iframe"],
     replacement: function (content, node) {
       // Twitter の埋め込み URL を返す
-      if (node.attributes["src"].value.indexOf("twitter.com") !== -1) {
+      if (
+        node.attributes["src"] &&
+        node.attributes["src"].value.indexOf("twitter.com") !== -1 &&
+        node.attributes["data-tweet-id"]
+      ) {
         return `[Tweet Link](https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value})`;
       }
 
