@@ -117,7 +117,7 @@ function unselect() {
 
 // select メッセージを受け取ったら要素を選択する
 browser.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message === "select") {
+  if (message.command === "select") {
     initialize();
     sendResponse({ response: "done" });
   }
@@ -125,12 +125,12 @@ browser.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 
 // メッセージを受け取った処理を実行する
 browser.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message === "clip") {
-    clip();
+  if (message.command === "clip") {
+    clip(message.tags, message.defaultFolder);
     unselect();
     sendResponse({ response: "done" });
   }
-  if (message === "unselect") {
+  if (message.command === "unselect") {
     unselect();
     sendResponse({ response: "done" });
   }

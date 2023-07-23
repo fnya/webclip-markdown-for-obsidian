@@ -106,7 +106,12 @@ const getImageWidth = (node) => {
 };
 
 // clip ボタンのコールバック
-const clip = async () => {
+const clip = async (tags, defaultFolder) => {
+  const saveTags = tags
+    .split(",")
+    .map((tag) => `#${tag.trim()} `)
+    .join(" ");
+
   const turndownService = new TurndownService({
     headingStyle: "atx",
     hr: "---",
@@ -202,7 +207,7 @@ const clip = async () => {
     "Source: " +
     document.URL +
     "\n" +
-    "Tags: #Firefox #ブラウザ拡張\n" +
+    `Tags: ${saveTags}\n` +
     "\n\n" +
     markdownBody;
 
@@ -226,6 +231,6 @@ const clip = async () => {
     "&content=" +
     encodeURIComponent(fileContent) +
     "&vault=webclip&file=" +
-    encodeURIComponent("2023/") +
+    encodeURIComponent(defaultFolder + "/") +
     encodeURIComponent(title);
 };

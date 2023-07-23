@@ -26,5 +26,5 @@
     "default_popup": "popup/clipper.html",
     "default_icon": "icons/clipper_32.png"
   },
-  "permissions": ["tabs", "<all_urls>"]
+  "permissions": ["tabs", "<all_urls>", "unlimitedStorage", "storage"]
 }

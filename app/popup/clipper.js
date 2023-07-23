@@ -7,8 +7,12 @@ function handleError(error) {
 }
 
 document.getElementById("clip").addEventListener("click", () => {
+  const defaultFolder = document.getElementById("defaultFolder").value;
+  const tags = document.getElementById("tags").value;
+  const message = { command: "clip", tags, defaultFolder };
+
   browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    browser.tabs.sendMessage(tabs[0].id, "clip").then(function (response) {
+    browser.tabs.sendMessage(tabs[0].id, message).then(function (response) {
       // console.log(response);
     });
   });
@@ -16,15 +20,17 @@ document.getElementById("clip").addEventListener("click", () => {
 
 // popup 表示時に要素を選択する
 browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  browser.tabs.sendMessage(tabs[0].id, "select").then(function (response) {
+  const message = { command: "select" };
+  browser.tabs.sendMessage(tabs[0].id, message).then(function (response) {
     // console.log(response);
   });
 });
 
 // popup クローズ時に要素選択を解除する
 window.addEventListener("blur", function (e) {
+  const message = { command: "unselect" };
   browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    browser.tabs.sendMessage(tabs[0].id, "unselect").then(function (response) {
+    browser.tabs.sendMessage(tabs[0].id, message).then(function (response) {
       // console.log(response);
     });
   });
