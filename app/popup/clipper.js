@@ -26,12 +26,13 @@ browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   });
 });
 
+// TODO: 選択範囲変更ができなくなるので一時的にコメントアウト
 // popup クローズ時に要素選択を解除する
-window.addEventListener("blur", function (e) {
-  const message = { command: "unselect" };
-  browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    browser.tabs.sendMessage(tabs[0].id, message).then(function (response) {
-      // console.log(response);
-    });
-  });
-});
+// window.addEventListener("blur", function (e) {
+//   const message = { command: "unselect" };
+//   browser.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//     browser.tabs.sendMessage(tabs[0].id, message).then(function (response) {
+//       // console.log(response);
+//     });
+//   });
+// });
