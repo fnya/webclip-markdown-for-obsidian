@@ -75,63 +75,51 @@ const getCurrentElement = () => {
 };
 
 // 初期処理を実行する
-async function initialize() {
+const initialize = () => {
   // デフォルト要素をセットする
   currentElement = getCurrentElement();
 
   // ボーダーを太くする
   currentElement.style.border = selectedBorderStyle;
+};
 
-  // ボタンの位置を取得する
-  const rect = currentElement.getBoundingClientRect();
+// 全体を選択する
+const selectAll = () => {
+  currentElement.style.border = "";
+  currentElement = document.body;
+  currentElement.style.border = selectedBorderStyle;
+};
 
-  // plus ボタン作成
-  plusButton = createButton(
-    "+",
-    rect.top - 8,
-    rect.left + 6,
-    24,
-    24,
-    plusButtonCallback
-  );
-  document.body.appendChild(plusButton);
-
-  // minus ボタン作成
-  minusButoon = createButton(
-    "-",
-    rect.top - 8,
-    rect.left + 24 + 7,
-    24,
-    24,
-    minusButoonCallback
-  );
-  document.body.appendChild(minusButoon);
-}
+// Main 要素を選択する
+const selectMain = () => {
+  currentElement.style.border = "";
+  currentElement = getCurrentElement();
+  currentElement.style.border = selectedBorderStyle;
+};
 
 // unselect メッセージを受け取ったら要素の選択を解除する
-function unselect() {
+const unselect = () => {
   currentElement.style.border = "";
   plusButton.remove();
   minusButoon.remove();
-}
-
-// select メッセージを受け取ったら要素を選択する
-browser.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (message.command === "select") {
-    initialize();
-    sendResponse({ response: "done" });
-  }
-});
+};
 
 // メッセージを受け取った処理を実行する
-browser.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command === "select") {
+    initialize();
+  }
+  if (message.command === "selectMain") {
+    selectMain();
+  }
+  if (message.command === "selectAll") {
+    selectAll();
+  }
   if (message.command === "clip") {
     clip(message.tags, message.defaultFolder);
     unselect();
-    sendResponse({ response: "done" });
   }
   if (message.command === "unselect") {
     unselect();
-    sendResponse({ response: "done" });
   }
 });

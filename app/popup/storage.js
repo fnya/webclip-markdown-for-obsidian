@@ -1,29 +1,22 @@
-document.getElementById("save").addEventListener("click", async () => {
+const saveTags = async () => {
   try {
-    const tags = [];
-    const tag1 = {
-      name: "tag1",
-      count: 3,
-    };
-    const tag2 = {
-      name: "tag2",
-      count: 2,
-    };
-    const tag3 = {
-      name: "tag3",
-      count: 1,
-    };
-    tags.push(tag1);
-    tags.push(tag2);
-    tags.push(tag3);
+    const tagElement = document.getElementById("tags");
+    const tags = tagElement.value.split(",");
+    const splitTags = tags.map((tag) => {
+      return { name: tag.trim(), count: 0 };
+    });
 
-    await browser.storage.local.set({ tags: JSON.stringify(tags) });
+    await browser.storage.local.set({ tags: JSON.stringify(splitTags) });
   } catch (error) {
     console.error(error);
   }
+};
+
+document.getElementById("save").addEventListener("click", async () => {
+  saveTags();
 });
 
-document.getElementById("load").addEventListener("click", async () => {
+const loadTags = async () => {
   try {
     const value = await browser.storage.local.get("tags");
     const tags = JSON.parse(value.tags);
@@ -36,11 +29,16 @@ document.getElementById("load").addEventListener("click", async () => {
         return -1;
       }
     });
-    const text = tags.map((tag) => tag.name).join(", ");
 
-    document.getElementById("tags").textContent = text;
+    for (const tag of tags) {
+      taggerElement.add_tag(tag.name);
+    }
   } catch (error) {
     console.error(error);
     document.getElementById("tags").textContent = error;
   }
+};
+
+document.getElementById("load").addEventListener("click", async () => {
+  loadTags();
 });

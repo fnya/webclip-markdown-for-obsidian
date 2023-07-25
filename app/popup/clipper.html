@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="clipper.css" />
+    <link rel="stylesheet" href="tagger.css" />
   </head>
 
   <body>
@@ -12,15 +13,24 @@
         <div class="text-section-header" id="header-title"></div>
       </div>
       <button id="clip">Clip</button>
+      <button id="selectMain">Select main</button>
+      <button id="selectAll">Select all</button>
       <button id="save">Save</button>
       <button id="load">Load</button>
 
       <div>
-        <input type="text" id="defaultFolder" />
-        <textarea id="tags" rows="5" cols="20"></textarea>
+        <div>
+          Default folder:<br />
+          <input type="text" id="defaultFolder" value="2023" />
+        </div>
+        <div>
+          Tags:<br />
+          <textarea id="tags" rows="5" cols="20"></textarea>
+        </div>
       </div>
     </div>
-    <script src="clipper.js"></script>
+    <script src="tagger.js"></script>
     <script src="storage.js"></script>
+    <script src="clipper.js"></script>
   </body>
 </html>

@@ -15,3 +15,4 @@ Web ページを Markdown の形式に変換して、Obsidian に保存します
 ## Open Source
 
 - [turndown](https://github.com/mixmark-io/turndown)
+- [jcubic/tagger](https://github.com/jcubic/tagger)
