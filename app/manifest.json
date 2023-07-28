@@ -1,5 +1,5 @@
 {
-  "name": "Web Clipper for Obsidian",
+  "name": "WebClip Markdown for Obsidian",
   "description": "Web Clip a web page in Markdown and save it to Obsidian",
   "default_locale": "en",
   "version": "0.0.1",
@@ -17,7 +17,7 @@
   ],
   "browser_action": {
     "browser_style": true,
-    "default_title": "Web Cliper for Obsidian",
+    "default_title": "WebClip Markdown for Obsidian",
     "default_popup": "popup/clipper.html",
     "default_icon": "icons/clipper_32.png"
   },

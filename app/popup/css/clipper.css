@@ -1,7 +1,7 @@
 html,
 body {
-  width: 320px;
-  height: 480px;
+  width: 440px;
+  height: 720px;
 }
 
 .panel {
@@ -9,5 +9,5 @@ body {
 }
 
 li {
-  margin-bottom: 5px;
+  margin: 5px;
 }

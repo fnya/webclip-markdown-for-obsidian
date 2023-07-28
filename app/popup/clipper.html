@@ -10,12 +10,17 @@
 
   <body>
     <div class="panel">
-      <div class="uk-tile uk-tile-primary uk-padding-small">
-        Web clipper for Obsidian
+      <div
+        class="uk-tile-primary uk-margin-left uk-width-5-6 uk-text-bold uk-text-center"
+        style="height: 40px; padding-top: 10px"
+      >
+        <span style="color: white; font-size: 16px"
+          >WebClip Markdown for Obsidian</span
+        >
       </div>
 
-      <div>
-        <div class="uk-margin-small">
+      <div class="uk-margin-left uk-margin-top">
+        <div class="uk-margin-left uk-margin-bottom uk-width-5-6">
           <ul class="uk-list">
             <li id="selectArticle">
               <span uk-icon="bookmark"></span>
@@ -28,43 +33,61 @@
           </ul>
         </div>
 
-        <div class="uk-margin-small">
+        <div class="uk-margin-left uk-margin-bottom">
           <span uk-icon="database"></span>
-          Vault: <span style="color: crimson; font-size: small">* required</span
-          ><br />
-          <input class="uk-input" type="text" id="vault" />
+          Vault:
+          <span style="color: crimson; font-size: small">* required</span><br />
+          <input class="uk-input uk-width-5-6" type="text" id="vault" />
         </div>
-        <div class="uk-margin-small">
+
+        <div class="uk-margin-left uk-margin-bottom">
           <span uk-icon="folder"></span>
           Default folder:
           <span style="color: crimson; font-size: small">* required</span><br />
           <div>
             <input
-              class="uk-input uk-padding-small"
+              class="uk-input uk-width-5-6"
               type="text"
               id="defaultFolder"
             />
           </div>
         </div>
-        <div class="uk-margin-small">
+
+        <div class="uk-margin-left uk-margin-bottom uk-width-4-5">
           <span uk-icon="tag"></span>
           Tags:
           <div>
-            <input class="uk-input uk-padding-small" type="text" id="tags" />
+            <input
+              type="text"
+              id="tags"
+              class="uk-input"
+              placeholder="Input tags"
+            />
           </div>
         </div>
-      </div>
-      <div class="uk-margin-small">
-        <span uk-icon="comment"></span>
-        Comment:
+
+        <div class="uk-margin-left uk-margin-bottom">
+          <span uk-icon="comment"></span>
+          Comment:
+          <div>
+            <textarea
+              id="comment"
+              class="uk-textarea uk-width-5-6"
+              rows="3"
+              placeholder="Input comment"
+            ></textarea>
+          </div>
+        </div>
+
         <div>
-          <input class="uk-input uk-padding-small" type="text" id="comment" />
+          <button
+            class="uk-margin-left uk-margin-bottom uk-button uk-button-primary uk-width-5-6"
+            id="clip"
+          >
+            <span class="uk-text-capitalize">Clip</span>
+          </button>
         </div>
       </div>
-    </div>
-      <button class="uk-button uk-width-1-1 uk-button-primary" id="clip">
-        <span class="">Clip</span>
-      </button>
     </div>
 
     <script src="js/tagger.js"></script>

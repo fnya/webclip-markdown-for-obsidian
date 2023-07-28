@@ -1,18 +1,18 @@
 {
   "appName": {
-    "message": "Web Cliper for Obsidian",
+    "message": "WebClip Markdown for Obsidian",
     "description": "Web Clip a web page in Markdown and save it to Obsidian."
   },
   "appShortName": {
-    "message": "Web Cliper for Obsidian",
+    "message": "WebClip Markdown for Obsidian",
     "description": "Web Clip a web page in Markdown and save it to Obsidian."
   },
   "appDescription": {
-    "message": "Web Cliper for Obsidian",
+    "message": "WebClip Markdown for Obsidian",
     "description": "Web Clip a web page in Markdown and save it to Obsidian."
   },
   "browserActionTitle": {
-    "message": "Web Cliper for Obsidian",
+    "message": "WebClip Markdown for Obsidian",
     "description": "Web Clip a web page in Markdown and save it to Obsidian."
   }
 }
