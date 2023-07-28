@@ -2,6 +2,7 @@ html,
 body {
   width: 440px;
   height: 720px;
+  overflow-x: hidden;
 }
 
 .panel {
@@ -10,4 +11,19 @@ body {
 
 li {
   margin: 5px;
+}
+
+.selectList {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0 !important;
+}
+
+.title {
+  background-color: #19448e;
+  color: #ffffff;
+  height: 40px;
+  padding-top: 10px;
+  font-size: 16px;
+  font-style: italic;
 }

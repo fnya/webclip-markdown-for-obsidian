@@ -1,7 +1,7 @@
 let taggerElement;
-const activeColor = "#add8e6";
-const defaultColor = "#ffffff";
-const mouseOverColor = "#f0f8ff";
+const activeColor = "rgb(137, 195, 235)"; // #89c3eb
+const defaultColor = "rgb(255, 255, 255)"; // #ffffff
+const mouseOverColor = "rgb(234, 244, 252)"; // #eaf4fc
 
 // 設定を保存する
 const saveSettings = async () => {
@@ -9,8 +9,12 @@ const saveSettings = async () => {
     const vault = document.getElementById("vault").value;
     const defaultFolder = document.getElementById("defaultFolder").value;
 
-    await browser.storage.local.set({ vault: vault });
-    await browser.storage.local.set({ defaultFolder: defaultFolder });
+    if (vault && vault !== "") {
+      await browser.storage.local.set({ vault: vault });
+    }
+    if (defaultFolder && defaultFolder !== "") {
+      await browser.storage.local.set({ defaultFolder: defaultFolder });
+    }
   } catch (error) {
     console.error(error);
   }
@@ -22,10 +26,10 @@ const loadSettings = async () => {
     const vault = await browser.storage.local.get("vault");
     const defaultFolder = await browser.storage.local.get("defaultFolder");
 
-    if (vault.vault) {
+    if (vault && vault.vault) {
       document.getElementById("vault").value = vault.vault;
     }
-    if (defaultFolder.defaultFolder) {
+    if (defaultFolder && defaultFolder.defaultFolder) {
       document.getElementById("defaultFolder").value =
         defaultFolder.defaultFolder;
     }
@@ -51,7 +55,9 @@ document.getElementById("clip").addEventListener("click", async () => {
   const vault = document.getElementById("vault").value;
   const defaultFolder = document.getElementById("defaultFolder").value;
   const tags = document.getElementById("tags").value;
-  const message = { command: "clip", vault, defaultFolder, tags };
+  const comment = document.getElementById("comment").value;
+
+  const message = { command: "clip", vault, defaultFolder, tags, comment };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     browser.tabs.sendMessage(tabs[0].id, message);
@@ -61,6 +67,7 @@ document.getElementById("clip").addEventListener("click", async () => {
 // selectArticle のイベントハンドラ
 document.getElementById("selectArticle").addEventListener("click", () => {
   document.getElementById("selectArticle").style.backgroundColor = activeColor;
+  document.getElementById("selectAll").style.backgroundColor = defaultColor;
   const message = { command: "selectArticle" };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -91,6 +98,7 @@ document.getElementById("selectArticle").addEventListener("mouseout", () => {
 // selectAll のイベントハンドラ
 document.getElementById("selectAll").addEventListener("click", () => {
   document.getElementById("selectAll").style.backgroundColor = activeColor;
+  document.getElementById("selectArticle").style.backgroundColor = defaultColor;
   const message = { command: "selectAll" };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {

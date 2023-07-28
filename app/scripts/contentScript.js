@@ -60,9 +60,20 @@ const getImageWidth = (node) => {
 
 // clip ボタンのコールバック
 const clip = async (message) => {
+  if (message.vault === "") {
+    alert("Please set the vault name.");
+    return;
+  }
+  if (message.defaultFolder === "") {
+    alert("Please set the default folder name.");
+    return;
+  }
+
   const saveTags = message.tags
     .split(",")
-    .map((tag) => `#${tag.trim()} `)
+    .map((tag) => `${tag.trim()}`)
+    .filter((tag) => tag !== "")
+    .map((tag) => `#${tag} `)
     .join(" ");
 
   const turndownService = new TurndownService({
@@ -165,6 +176,7 @@ const clip = async (message) => {
     document.URL +
     "\n" +
     `Tags: ${saveTags}\n` +
+    `Commnet:\n${message.comment}\n` +
     "\n\n" +
     markdownBody;
 
