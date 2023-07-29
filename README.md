@@ -25,6 +25,11 @@ const vault = ""; // Vault 名を指定できる
 const folder = ""; // デフォルトフォルダを指定できる
 ```
 
+## iOS Shortcut
+
+- [ios-shortcut.js](ios-shortcut.js): iOS(iPhone, iPad) で動作するショートカットです。
+- [ios-shortcut-all.js](ios-shortcut-all.js): 上記のページ全体を選択するショートカットです。
+
 ## Open Source
 
 - [turndown](https://github.com/mixmark-io/turndown)
