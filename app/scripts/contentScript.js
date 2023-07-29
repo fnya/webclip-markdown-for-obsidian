@@ -146,6 +146,11 @@ const getTitle = () => {
   );
 };
 
+// 前ゼロ埋め
+const paddingZero = (num, paddingLength) => {
+  return ("0".repeat(paddingLength) + num.toString()).slice(paddingLength * -1);
+};
+
 // Obsidian のヘッダーを作成する
 const createObsidianHeader = (message) => {
   const saveTags = message.tags
@@ -155,15 +160,23 @@ const createObsidianHeader = (message) => {
     .map((tag) => `#${tag} `)
     .join(" ");
 
+  const now = new Date();
   return (
     "Cliped: " +
-    new Date().toLocaleString() +
+    now.getFullYear() +
+    "-" +
+    paddingZero(now.getMonth() + 1, 2) +
+    "-" +
+    paddingZero(now.getDate(), 2) +
+    " " +
+    paddingZero(now.getHours(), 2) +
+    ":" +
+    paddingZero(now.getMinutes(), 2) +
     "\n" +
     "Source: " +
     document.URL +
     "\n" +
-    `Tags: ${saveTags}\n` +
-    `Commnet:\n${message.comment}\n\n\n`
+    `Tags: ${saveTags}\n\n\n`
   );
 };
 
