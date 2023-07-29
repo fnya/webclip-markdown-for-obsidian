@@ -27,3 +27,10 @@ li {
   font-size: 16px;
   font-style: italic;
 }
+
+.resizeButton {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0;
+  padding: 0;
+}

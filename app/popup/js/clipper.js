@@ -43,6 +43,7 @@ const handleResponse = (message) => {
 };
 
 const handleError = (error) => {
+  alert(`Error: ${error}`);
   console.log(`Error: ${error}`);
 };
 
@@ -67,6 +68,24 @@ document.getElementById("clip").addEventListener("click", async () => {
     comment,
     bookmarkSelected,
   };
+
+  browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    browser.tabs.sendMessage(tabs[0].id, message);
+  });
+});
+
+// plusButton のイベントハンドラ
+document.getElementById("plusButton").addEventListener("click", () => {
+  const message = { command: "plus" };
+
+  browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    browser.tabs.sendMessage(tabs[0].id, message).error(handleError);
+  });
+});
+
+// minusButton のイベントハンドラ
+document.getElementById("minusButton").addEventListener("click", () => {
+  const message = { command: "minus" };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     browser.tabs.sendMessage(tabs[0].id, message);
@@ -186,4 +205,13 @@ const initializeTagger = async () => {
   await loadSettings();
 };
 
+const initialSelectArticle = () => {
+  const message = { command: "selectArticle" };
+
+  browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    browser.tabs.sendMessage(tabs[0].id, message);
+  });
+};
+
 initializeTagger();
+initialSelectArticle();

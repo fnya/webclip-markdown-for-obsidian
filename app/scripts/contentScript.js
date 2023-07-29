@@ -1,6 +1,62 @@
 const selectedBorderStyle = "solid 5px blue";
 let currentElement;
 
+// 選択範囲プラス
+const plus = () => {
+  if (currentElement && currentElement.parentElement !== document.body) {
+    currentElement.style.border = "";
+    currentElement = currentElement.parentElement;
+    currentElement.style.border = selectedBorderStyle;
+  }
+};
+
+// 選択範囲マイナス
+const minus = () => {
+  const allowIdsOrClasses = [
+    "container",
+    "content",
+    "wrapper",
+    "main",
+    "entry",
+    "news",
+  ];
+
+  if (currentElement.children && currentElement.children.length > 0) {
+    let childeElement;
+
+    for (const child of currentElement.children) {
+      // id チェック
+      if (child.id) {
+        allowIdsOrClasses.forEach((allowIdOrClass) => {
+          if (child.id.indexOf(allowIdOrClass) !== -1) {
+            childeElement = child;
+          }
+        });
+      }
+      // class チェック
+      if (child.className) {
+        allowIdsOrClasses.forEach((allowIdOrClass) => {
+          if (child.className.indexOf(allowIdOrClass) !== -1) {
+            childeElement = child;
+          }
+        });
+      }
+
+      if (childeElement) {
+        break;
+      }
+    }
+
+    if (!childeElement) {
+      return;
+    }
+
+    currentElement.style.border = "";
+    currentElement = childeElement;
+    currentElement.style.border = selectedBorderStyle;
+  }
+};
+
 // URL の画像ファイルを Base64 でエンコードする
 const getBase64FromUrl = async (url) => {
   const data = await fetch(url);
@@ -341,10 +397,12 @@ const getCurrentElement = () => {
     ':not([id*="header"])' +
     ':not([id*="ranking"])' +
     ':not([id*="wrap"])' +
+    ':not([id*="Wrapper"])' +
     ':not([id*="sub"])' +
     ':not([id*="widget"])' +
     ':not([id*="module"])' +
     ':not([id*="thumbnail"])' +
+    ':not([id*="storycard"])' +
     ":not(script)";
 
   const classNegative =
@@ -354,10 +412,12 @@ const getCurrentElement = () => {
     ':not([class*="header"])' +
     ':not([class*="ranking"])' +
     ':not([class*="wrap"])' +
+    ':not([class*="Wrapper"])' +
     ':not([class*="sub"])' +
     ':not([class*="widget"])' +
     ':not([class*="module"])' +
     ':not([class*="thumbnail"])' +
+    ':not([class*="storycard"])' +
     ":not(script)";
 
   let elements = document.querySelectorAll('[id*="main"]' + idNegative);
@@ -376,12 +436,20 @@ const getCurrentElement = () => {
   if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[id*="article"]' + idNegative);
   }
-
   if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[id*="News"]' + idNegative);
   }
   if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[id*="news"]' + idNegative);
+  }
+  if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[id*="content"]' + idNegative);
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[class*="News"]' + classNegative);
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[class*="news"]' + classNegative);
   }
   if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[class*="content"]' + classNegative);
@@ -390,8 +458,7 @@ const getCurrentElement = () => {
     elements = document.querySelectorAll('[class*="day"]');
   }
 
-  // デフォルトの要素を設定する
-  if (!elements || elements.length > 0) {
+  if (elements && elements.length > 0) {
     return elements[0];
   }
 
@@ -402,9 +469,6 @@ const getCurrentElement = () => {
 const initialize = () => {
   // デフォルト要素をセットする
   currentElement = getCurrentElement();
-
-  // ボーダーを太くする
-  currentElement.style.border = selectedBorderStyle;
 };
 
 // 全体を選択する
@@ -436,6 +500,12 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === "selectArticle") {
     selectArticle();
   }
+  if (message.command === "plus") {
+    plus();
+  }
+  if (message.command === "minus") {
+    minus();
+  }
   if (message.command === "selectAll") {
     selectAll();
   }
@@ -452,3 +522,10 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     unselect();
   }
 });
+
+// 初期処理実行制御
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initialize);
+} else {
+  initialize();
+}
