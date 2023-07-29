@@ -10,6 +10,10 @@ javascript: Promise.all([
   /* Optional folder name such as "Clippings/" */
   const folder = "";
 
+  /* Optional default tags such as "tag1, tag2" */
+  /* Numeric-only tags will not work due to Obsidian specifications.*/
+  const tags = "";
+
   const getCurrentElement = () => {
     if (isFullPage) {
       return document.body;
@@ -217,14 +221,41 @@ javascript: Promise.all([
       .replaceAll("|", " ");
   };
 
+  const paddingZero = (num, paddingLength) => {
+    return ("0".repeat(paddingLength) + num.toString()).slice(
+      paddingLength * -1
+    );
+  };
+
   const createObsidianHeader = () => {
+    let saveTags;
+
+    if (tags && tags !== "") {
+      saveTags = tags
+        .split(",")
+        .map((tag) => `${tag.trim()}`)
+        .filter((tag) => tag !== "")
+        .map((tag) => `#${tag} `)
+        .join(" ");
+    }
+
+    const now = new Date();
     return (
       "Cliped: " +
-      new Date().toLocaleString() +
+      now.getFullYear() +
+      "-" +
+      paddingZero(now.getMonth() + 1, 2) +
+      "-" +
+      paddingZero(now.getDate(), 2) +
+      " " +
+      paddingZero(now.getHours(), 2) +
+      ":" +
+      paddingZero(now.getMinutes(), 2) +
       "\n" +
       "Source: " +
       document.URL +
-      "\n\n"
+      "\n" +
+      `Tags: ${saveTags}\n\n\n`
     );
   };
 
