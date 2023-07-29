@@ -72,23 +72,90 @@ const getImageWidth = (node) => {
   return width;
 };
 
-// clip ボタンのコールバック
-const clip = async (message) => {
-  if (message.vault === "") {
-    alert("Please set the vault name.");
-    return;
-  }
-  if (message.defaultFolder === "") {
-    alert("Please set the default folder name.");
-    return;
-  }
+// タイトルの正規化を行う
+const getTitle = () => {
+  return (
+    document.title
+      // for Mac
+      .replaceAll(":", " ")
+      .replaceAll(".", " ")
+      // for Windows
+      .replaceAll("¥", " ")
+      .replaceAll("/", " ")
+      .replaceAll("*", " ")
+      .replaceAll("?", " ")
+      .replaceAll("<", " ")
+      .replaceAll(">", " ")
+      .replaceAll("|", " ") // OneDrive, too
+  );
+};
 
+// Obsidian のヘッダーを作成する
+const createObsidianHeader = (message) => {
   const saveTags = message.tags
     .split(",")
     .map((tag) => `${tag.trim()}`)
     .filter((tag) => tag !== "")
     .map((tag) => `#${tag} `)
     .join(" ");
+
+  return (
+    "Cliped: " +
+    new Date().toLocaleString() +
+    "\n" +
+    "Source: " +
+    document.URL +
+    "\n" +
+    `Tags: ${saveTags}\n` +
+    `Commnet:\n${message.comment}\n\n\n`
+  );
+};
+
+// メッセージのエラーをチェックする
+const hasMessageError = (message) => {
+  if (message.vault === "") {
+    alert("Please set the vault name.");
+    return true;
+  }
+  if (message.defaultFolder === "") {
+    alert("Please set the default folder name.");
+    return true;
+  }
+
+  return false;
+};
+
+// bookmark 処理を行う
+const bookmark = (message) => {
+  // エラーチェック
+  if (hasMessageError(message)) {
+    return;
+  }
+
+  // タイトルを取得する
+  const title = getTitle();
+
+  // Obsidian に渡すデータを作成する
+  const fileContent = createObsidianHeader(message);
+
+  // Obsidian を起動する
+  document.location.href =
+    "obsidian://new?" +
+    "&content=" +
+    encodeURIComponent(fileContent) +
+    "&vault=" +
+    encodeURIComponent(message.vault) +
+    "&file=" +
+    encodeURIComponent(message.defaultFolder + "/") +
+    encodeURIComponent(title);
+};
+
+// clip ボタンのコールバック
+const clip = async (message) => {
+  // エラーチェック
+  if (hasMessageError(message)) {
+    return;
+  }
 
   const turndownService = new TurndownService({
     headingStyle: "atx",
@@ -199,28 +266,10 @@ const clip = async (message) => {
   }
 
   // Obsidian に渡すデータを作成する
-  const fileContent =
-    "Source: " +
-    document.URL +
-    "\n" +
-    `Tags: ${saveTags}\n` +
-    `Commnet:\n${message.comment}\n` +
-    "\n\n" +
-    markdownBody;
+  const fileContent = createObsidianHeader(message) + markdownBody;
 
-  // タイトルの正規化を行う
-  const title = document.title
-    // for Mac
-    .replaceAll(":", " ")
-    .replaceAll(".", " ")
-    // for Windows
-    .replaceAll("¥", " ")
-    .replaceAll("/", " ")
-    .replaceAll("*", " ")
-    .replaceAll("?", " ")
-    .replaceAll("<", " ")
-    .replaceAll(">", " ")
-    .replaceAll("|", " "); // OneDrive, too
+  // タイトルを取得する
+  const title = getTitle();
 
   // Obsidian を起動する
   document.location.href =
@@ -311,12 +360,15 @@ const getCurrentElement = () => {
     ':not([class*="thumbnail"])' +
     ":not(script)";
 
-  let elements = document.querySelectorAll("article" + classNegative);
+  let elements = document.querySelectorAll('[id*="main"]' + idNegative);
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[class*="main"]' + classNegative);
+    elements = document.querySelectorAll('[id*="Main"]' + idNegative);
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="main"]' + idNegative);
+    elements = document.querySelectorAll("article" + classNegative);
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[class*="main"]' + classNegative);
   }
   if (!elements || elements.length === 0) {
     elements = document.getElementsByTagName("main");
@@ -325,9 +377,6 @@ const getCurrentElement = () => {
     elements = document.querySelectorAll('[id*="article"]' + idNegative);
   }
 
-  if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="Main"]' + idNegative);
-  }
   if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[id*="News"]' + idNegative);
   }
@@ -391,7 +440,12 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     selectAll();
   }
   if (message.command === "clip") {
-    clip(message);
+    if (message.bookmarkSelected) {
+      bookmark(message);
+    } else {
+      clip(message);
+    }
+
     unselect();
   }
   if (message.command === "unselect") {

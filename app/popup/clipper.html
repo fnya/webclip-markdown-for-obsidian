@@ -10,16 +10,20 @@
 
   <body>
     <div class="panel">
-      <div class="uk-margin-left uk-margin-top">
-        <div class="uk-width-5-6 uk-margin-bottom">
+      <div class="uk-margin-left uk-margin-top-small">
+        <div class="uk-width-5-6">
           <ul class="uk-list">
             <li id="selectArticle" class="selectList">
-              <span uk-icon="bookmark"></span>
+              <span uk-icon="file-text"></span>
               Select article
             </li>
             <li id="selectAll" class="selectList">
               <span uk-icon="table"></span>
               Select all
+            </li>
+            <li id="bookmark" class="selectList">
+              <span uk-icon="bookmark"></span>
+              Bookmark
             </li>
           </ul>
         </div>
@@ -64,7 +68,7 @@
             <textarea
               id="comment"
               class="uk-textarea uk-width-5-6"
-              rows="3"
+              rows="2"
               placeholder="Input comment"
             ></textarea>
           </div>
@@ -77,9 +81,6 @@
           >
             <span class="uk-text-capitalize">Clip</span>
           </button>
-        </div>
-        <div class="uk-margin-top">
-          <img src="images/clipper_24.png" /> WebClip Markdown for Obsidian
         </div>
       </div>
     </div>

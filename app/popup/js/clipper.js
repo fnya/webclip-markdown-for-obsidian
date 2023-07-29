@@ -56,8 +56,17 @@ document.getElementById("clip").addEventListener("click", async () => {
   const defaultFolder = document.getElementById("defaultFolder").value;
   const tags = document.getElementById("tags").value;
   const comment = document.getElementById("comment").value;
+  const bookmarkSelected =
+    document.getElementById("bookmark").style.backgroundColor === activeColor;
 
-  const message = { command: "clip", vault, defaultFolder, tags, comment };
+  const message = {
+    command: "clip",
+    vault,
+    defaultFolder,
+    tags,
+    comment,
+    bookmarkSelected,
+  };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     browser.tabs.sendMessage(tabs[0].id, message);
@@ -68,6 +77,7 @@ document.getElementById("clip").addEventListener("click", async () => {
 document.getElementById("selectArticle").addEventListener("click", () => {
   document.getElementById("selectArticle").style.backgroundColor = activeColor;
   document.getElementById("selectAll").style.backgroundColor = defaultColor;
+  document.getElementById("bookmark").style.backgroundColor = defaultColor;
   const message = { command: "selectArticle" };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -99,6 +109,7 @@ document.getElementById("selectArticle").addEventListener("mouseout", () => {
 document.getElementById("selectAll").addEventListener("click", () => {
   document.getElementById("selectAll").style.backgroundColor = activeColor;
   document.getElementById("selectArticle").style.backgroundColor = defaultColor;
+  document.getElementById("bookmark").style.backgroundColor = defaultColor;
   const message = { command: "selectAll" };
 
   browser.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -119,6 +130,29 @@ document.getElementById("selectAll").addEventListener("mouseout", () => {
     document.getElementById("selectAll").style.backgroundColor !== activeColor
   ) {
     document.getElementById("selectAll").style.backgroundColor = defaultColor;
+  }
+});
+
+// bookmark のイベントハンドラ
+document.getElementById("bookmark").addEventListener("click", () => {
+  document.getElementById("selectAll").style.backgroundColor = defaultColor;
+  document.getElementById("selectArticle").style.backgroundColor = defaultColor;
+  document.getElementById("bookmark").style.backgroundColor = activeColor;
+});
+
+document.getElementById("bookmark").addEventListener("mouseover", () => {
+  if (
+    document.getElementById("bookmark").style.backgroundColor !== activeColor
+  ) {
+    document.getElementById("bookmark").style.backgroundColor = mouseOverColor;
+  }
+});
+
+document.getElementById("bookmark").addEventListener("mouseout", () => {
+  if (
+    document.getElementById("bookmark").style.backgroundColor !== activeColor
+  ) {
+    document.getElementById("bookmark").style.backgroundColor = defaultColor;
   }
 });
 
