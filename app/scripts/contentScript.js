@@ -5,12 +5,15 @@ let currentElement;
 const getBase64FromUrl = async (url) => {
   const data = await fetch(url);
   const blob = await data.blob();
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
     reader.onloadend = () => {
       const base64data = reader.result;
       resolve(base64data);
+    };
+    reader.onerror = () => {
+      reject(null);
     };
   });
 };
@@ -20,6 +23,12 @@ const isImage = async (url) => {
   try {
     let response = await fetch(url, { method: "HEAD" });
     let contentType = response.headers.get("content-type");
+
+    // SVG は対象外
+    if (contentType && contentType.startsWith("image/svg")) {
+      return false;
+    }
+
     return contentType && contentType.startsWith("image/");
   } catch (error) {
     console.error(error);
@@ -31,14 +40,19 @@ const isImage = async (url) => {
 const getImageInfomaion = (node) => {
   let imageUrl = "";
 
-  if (node.attributes["data-src"]) {
+  if (node.attributes["data-src"] && node.attributes["data-src"].value !== "") {
     imageUrl = node.attributes["data-src"].value;
   }
   if (node.attributes["src"] && node.attributes["src"].value !== "") {
     imageUrl = node.attributes["src"].value;
   }
 
-  const alt = node.attributes["alt"] ? node.attributes["alt"].value : "image";
+  let alt;
+  if (node.attributes["alt"] && node.attributes["alt"].value !== "") {
+    alt = node.attributes["alt"].value;
+  } else {
+    alt = "image";
+  }
 
   return { imageUrl, alt };
 };
@@ -84,6 +98,24 @@ const clip = async (message) => {
     emDelimiter: "*",
   });
 
+  turndownService.addRule("figureTagsReplace", {
+    filter: ["figure"],
+    replacement: (content, node) => {
+      let response = "";
+      const images = node.querySelectorAll("img");
+      if (images && images.length > 0) {
+        images.forEach((image) => {
+          const imageInformation = getImageInfomaion(image);
+          response += `\n![${imageInformation.alt}](${getCorrectUrl(
+            imageInformation.imageUrl
+          )})\n`;
+        });
+      }
+
+      return `${response}`;
+    },
+  });
+
   turndownService.addRule("iframeTagsReplace", {
     filter: ["iframe"],
     replacement: (content, node) => {
@@ -125,24 +157,20 @@ const clip = async (message) => {
       if (images && images.length > 0) {
         images.forEach((image) => {
           const imageInformation = getImageInfomaion(image);
-          const alt =
-            imageInformation.alt || imageInformation.alt !== ""
-              ? imageInformation.alt
-              : "Image link";
-          response += `\n![${alt}](${getCorrectUrl(
+          response += `\n![${imageInformation.alt}](${getCorrectUrl(
             imageInformation.imageUrl
           )})\n`;
         });
       }
 
-      const alt = node.innerText || "Link";
+      const alt = node.textContent || "Link";
 
       return `[${alt}](${getCorrectUrl(href)})${response}`;
     },
   });
 
   // 不要タグを除外する
-  turndownService.remove(["script", "noscript", "footer"]);
+  turndownService.remove(["script", "noscript", "head", "footer", "select"]);
 
   // 非表示要素を除外する
   const allElements = currentElement.querySelectorAll("*");
@@ -158,7 +186,7 @@ const clip = async (message) => {
   let markdownBody = turndownService.turndown(currentElement.outerHTML);
 
   // 画像の URL を抽出する
-  const imageMatches = markdownBody.match(/https?:\/\/([\w!\?/\-_=\.&%;])+/g);
+  const imageMatches = markdownBody.match(/https?:\/\/([\w!\?/\-_=\.&%;:,])+/g);
 
   // 画像の URL を base64 に変換する
   try {
@@ -243,8 +271,8 @@ const processMatches = async (matches, markdownBody) => {
   let replacedMarkdownBody = markdownBody;
 
   results.forEach((result) => {
-    if (result) {
-      replacedMarkdownBody = replacedMarkdownBody.replace(
+    if (result && result.base64String) {
+      replacedMarkdownBody = replacedMarkdownBody.replaceAll(
         result.match,
         result.base64String
       );
@@ -257,18 +285,57 @@ const processMatches = async (matches, markdownBody) => {
 // デフォルト要素をセットする
 const getCurrentElement = () => {
   // ページの main 要素を取得する
-  let elements = document.querySelectorAll("[id*='main']");
+  const idNegative =
+    ':not([id*="side"])' +
+    ':not([id*="logo"])' +
+    ':not([id*="menu"])' +
+    ':not([id*="header"])' +
+    ':not([id*="ranking"])' +
+    ':not([id*="wrap"])' +
+    ':not([id*="sub"])' +
+    ':not([id*="widget"])' +
+    ':not([id*="module"])' +
+    ':not([id*="thumbnail"])' +
+    ":not(script)";
+
+  const classNegative =
+    ':not([class*="side"])' +
+    ':not([class*="logo"])' +
+    ':not([class*="menu"])' +
+    ':not([class*="header"])' +
+    ':not([class*="ranking"])' +
+    ':not([class*="wrap"])' +
+    ':not([class*="sub"])' +
+    ':not([class*="widget"])' +
+    ':not([class*="module"])' +
+    ':not([class*="thumbnail"])' +
+    ":not(script)";
+
+  let elements = document.querySelectorAll("article" + classNegative);
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="Main"]');
+    elements = document.querySelectorAll('[class*="main"]' + classNegative);
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="News"]');
-  }
-  if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[class*="main"]');
+    elements = document.querySelectorAll('[id*="main"]' + idNegative);
   }
   if (!elements || elements.length === 0) {
     elements = document.getElementsByTagName("main");
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[id*="article"]' + idNegative);
+  }
+
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[id*="Main"]' + idNegative);
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[id*="News"]' + idNegative);
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[id*="content"]' + idNegative);
+  }
+  if (!elements || elements.length === 0) {
+    elements = document.querySelectorAll('[class*="content"]' + classNegative);
   }
   if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[class*="day"]');
