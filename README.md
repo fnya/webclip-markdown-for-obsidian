@@ -12,7 +12,7 @@ Web ページを Markdown の形式に変換して、Obsidian に保存します
 
 こちらの [Bookmarklet](bookmarklet.js) を使用すると、Web ページを Markdown の形式に変換して、Obsidian に保存することができます。
 
-Bookmarklet の下記箇所を修正すると、
+Bookmarklet の下記箇所を修正してカスタマイズできます。
 
 ```javascript
 /* when 'true', select full page  */
