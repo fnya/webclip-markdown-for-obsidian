@@ -365,14 +365,13 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
 
     const fileContent = createObsidianHeader() + markdownBody;
 
-    const vaultName = vault === "" ? "" : encodeURIComponent(vault);
+    const vaultName = vault === "" ? "" : "&vault=" + encodeURIComponent(vault);
     const folderName = folder === "" ? "" : encodeURIComponent(folder + "/");
 
     document.location.href =
       "obsidian://new?" +
       "&content=" +
       encodeURIComponent(fileContent) +
-      "&vault=" +
       vaultName +
       "&file=" +
       folderName +
