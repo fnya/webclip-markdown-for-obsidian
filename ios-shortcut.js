@@ -378,6 +378,6 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
       folderName +
       encodeURIComponent(getTitle());
 
-    completion(result);
+    completion(rusult);
   }
 );
