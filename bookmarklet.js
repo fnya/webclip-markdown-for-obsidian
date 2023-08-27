@@ -32,6 +32,7 @@ javascript: Promise.all([
       ':not([id*="module"])' +
       ':not([id*="thumbnail"])' +
       ':not([id*="storycard"])' +
+      ':not([id*="mhMain"])' +
       ":not(script)";
 
     const classNegative =
@@ -47,6 +48,7 @@ javascript: Promise.all([
       ':not([class*="module"])' +
       ':not([class*="thumbnail"])' +
       ':not([class*="storycard"])' +
+      ':not([class*="mhMain"])' +
       ":not(script)";
 
     let elements = document.querySelectorAll('[id*="main"]' + idNegative);

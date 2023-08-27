@@ -38,8 +38,6 @@ iOS のショートカットは、次の手順で作成します。
 - ショートカットの新規作成から、「Web ページで JavaScript を実行」を選択し、用途に応じて以下のスクリプトを貼り付けます
   - [ios-shortcut.js](ios-shortcut.js)
     - Web ページの本文を選択して Markdown に変換し Obsidian に保存します
-  - [ios-shortcut-all.js](ios-shortcut-all.js)
-    - Web ページ全体を選択して Markdown に変換し Obsidian に保存します
 - アプリの設定で「共有シートに表示」をオンにします
 - スクリプトの入力を「ショートカットの入力」に修正します
 - 設定のショートカットの詳細で、「スクリプトの実行」をオンにします
@@ -52,3 +50,4 @@ iOS のショートカットは、次の手順で作成します。
 - [turndown](https://github.com/mixmark-io/turndown)
 - [jcubic/tagger](https://github.com/jcubic/tagger)
 - [UIkit](https://getuikit.com/)
+- [jQuery](https://jquery.com/)

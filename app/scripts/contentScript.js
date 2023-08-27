@@ -234,24 +234,6 @@ const clip = async (message) => {
     emDelimiter: "*",
   });
 
-  turndownService.addRule("figureTagsReplace", {
-    filter: ["figure"],
-    replacement: (content, node) => {
-      let response = "";
-      const images = node.querySelectorAll("img");
-      if (images && images.length > 0) {
-        images.forEach((image) => {
-          const imageInformation = getImageInfomaion(image);
-          response += `\n![${imageInformation.alt}](${getCorrectUrl(
-            imageInformation.imageUrl
-          )})\n`;
-        });
-      }
-
-      return `${response}`;
-    },
-  });
-
   turndownService.addRule("iframeTagsReplace", {
     filter: ["iframe"],
     replacement: (content, node) => {
@@ -261,7 +243,7 @@ const clip = async (message) => {
         node.attributes["src"].value.indexOf("twitter.com") !== -1 &&
         node.attributes["data-tweet-id"]
       ) {
-        return `[Tweet Link](https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value})`;
+        return `![][https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value}]`;
       }
 
       return "";
@@ -273,13 +255,21 @@ const clip = async (message) => {
   turndownService.addRule("imageTagsReplace", {
     filter: ["img"],
     replacement: (content, node) => {
+      if (node.attributes["loading"]) {
+        node.removeAttribute("loading");
+      }
+
       const imgae = getImageInfomaion(node);
-      const width = getImageWidth(node);
+      const width = $(node).width();
 
       if (width) {
         return `![${imgae.alt}|${width}](${getCorrectUrl(imgae.imageUrl)})`;
       }
-      return `![${imgae.alt}](${getCorrectUrl(imgae.imageUrl)})`;
+      if (imgae.alt) {
+        return `![${imgae.alt}](${getCorrectUrl(imgae.imageUrl)})`;
+      }
+
+      return `![image](${getCorrectUrl(imgae.imageUrl)})`;
     },
   });
 
@@ -292,10 +282,31 @@ const clip = async (message) => {
       const images = node.querySelectorAll("img");
       if (images && images.length > 0) {
         images.forEach((image) => {
+          if (image.attributes["loading"]) {
+            image.removeAttribute("loading");
+          }
+
           const imageInformation = getImageInfomaion(image);
-          response += `\n![${imageInformation.alt}](${getCorrectUrl(
-            imageInformation.imageUrl
-          )})\n`;
+          const width = $(image).width();
+
+          if (width) {
+            response += `\n![${imageInformation.alt}|${width}](${getCorrectUrl(
+              imageInformation.imageUrl
+            )})\n`;
+            if (imageInformation.alt) {
+              response += `\n![${
+                imageInformation.alt
+              }|${width}](${getCorrectUrl(imageInformation.imageUrl)})\n`;
+            } else {
+              response += `\n![image|${width}](${getCorrectUrl(
+                imageInformation.imageUrl
+              )})\n`;
+            }
+          } else {
+            response += `\n![${imageInformation.alt}](${getCorrectUrl(
+              imageInformation.imageUrl
+            )})\n`;
+          }
         });
       }
 
@@ -367,7 +378,8 @@ const getCorrectUrl = (url) => {
     !url.startsWith("http") &&
     !url.startsWith("/")
   ) {
-    correctUrl = document.URL + url;
+    const slashIndex = document.URL.lastIndexOf("/");
+    correctUrl = document.URL.substring(0, slashIndex + 1) + url;
   }
 
   return correctUrl;
@@ -416,6 +428,7 @@ const getCurrentElement = () => {
     ':not([id*="module"])' +
     ':not([id*="thumbnail"])' +
     ':not([id*="storycard"])' +
+    ':not([id*="mhMain"])' +
     ":not(script)";
 
   const classNegative =
@@ -431,6 +444,7 @@ const getCurrentElement = () => {
     ':not([class*="module"])' +
     ':not([class*="thumbnail"])' +
     ':not([class*="storycard"])' +
+    ':not([class*="mhMain"])' +
     ":not(script)";
 
   let elements = document.querySelectorAll('[id*="main"]' + idNegative);

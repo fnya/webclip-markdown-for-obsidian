@@ -33,6 +33,7 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
         ':not([id*="module"])' +
         ':not([id*="thumbnail"])' +
         ':not([id*="storycard"])' +
+        ':not([id*="mhMain"])' +
         ":not(script)";
 
       const classNegative =
@@ -48,6 +49,7 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
         ':not([class*="module"])' +
         ':not([class*="thumbnail"])' +
         ':not([class*="storycard"])' +
+        ':not([class*="mhMain"])' +
         ":not(script)";
 
       let elements = document.querySelectorAll('[id*="main"]' + idNegative);
