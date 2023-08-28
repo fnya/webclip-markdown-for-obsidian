@@ -4,15 +4,9 @@
 
 Web ページを Markdown の形式に変換して、Obsidian に保存します。
 
-画像は Base64 でエンコードして、以下の形式で保存します(一部抜粋)。
+画像や Twitter のツイートは、URL のままのため、元データが削除されれば参照できなくなるためご注意ください。
 
-```
-data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAApQAAAHJCAYAAAA7N6mIAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAP+lSURBVHhe7J0FYBVHF4UPJLi7u7t...
-```
-
-これにより、画像があっても 1 つの Markdown ファイルに保存することができます。
-
-制約事項として、Web サイトの URL と画像の URL のドメイン名が異なる場合は、画像は Base64 でエンコードせずに、画像の URL をそのまま保存します。
+開発中の、[Media Sync](https://github.com/fnya/media-sync) という Obsidian のプラグインを使用すると、画像をローカルに保存できます。
 
 ## Bookmarklet
 
@@ -50,4 +44,3 @@ iOS のショートカットは、次の手順で作成します。
 - [turndown](https://github.com/mixmark-io/turndown)
 - [jcubic/tagger](https://github.com/jcubic/tagger)
 - [UIkit](https://getuikit.com/)
-- [jQuery](https://jquery.com/)

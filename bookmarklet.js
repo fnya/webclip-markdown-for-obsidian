@@ -100,38 +100,6 @@ javascript: Promise.all([
 
   const currentElement = getCurrentElement();
 
-  const getBase64FromUrl = async (url) => {
-    const data = await fetch(url);
-    const blob = await data.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => {
-        const base64data = reader.result;
-        resolve(base64data);
-      };
-      reader.onerror = () => {
-        reject(null);
-      };
-    });
-  };
-
-  const isImage = async (url) => {
-    try {
-      let response = await fetch(url, { method: "HEAD" });
-      let contentType = response.headers.get("content-type");
-
-      if (contentType && contentType.startsWith("image/svg")) {
-        return false;
-      }
-
-      return contentType && contentType.startsWith("image/");
-    } catch (error) {
-      console.error(error);
-      return false;
-    }
-  };
-
   const getImageInfomaion = (node) => {
     let imageUrl = "";
 
@@ -184,32 +152,6 @@ javascript: Promise.all([
     return correctUrl;
   };
 
-  const processMatches = async (matches, markdownBody) => {
-    const promises = matches.map(async (match) => {
-      const image = await isImage(match);
-      if (image) {
-        const base64String = await getBase64FromUrl(match);
-        return { match, base64String };
-      }
-      return null;
-    });
-
-    const results = await Promise.all(promises);
-
-    let replacedMarkdownBody = markdownBody;
-
-    results.forEach((result) => {
-      if (result && result.base64String) {
-        replacedMarkdownBody = replacedMarkdownBody.replaceAll(
-          result.match,
-          result.base64String
-        );
-      }
-    });
-
-    return replacedMarkdownBody;
-  };
-
   const getTitle = () => {
     return document.title
       .replaceAll(":", " ")
@@ -257,7 +199,7 @@ javascript: Promise.all([
       "Source: " +
       document.URL +
       "\n" +
-      `Tags: ${saveTags}\n\n\n`
+      `Tags: ${saveTags ? saveTags : ""}\n\n\n`
     );
   };
 
@@ -295,7 +237,7 @@ javascript: Promise.all([
         node.attributes["src"].value.indexOf("twitter.com") !== -1 &&
         node.attributes["data-tweet-id"]
       ) {
-        return `[Tweet Link](https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value})`;
+        return `![][https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value}]`;
       }
 
       return "";
@@ -348,17 +290,7 @@ javascript: Promise.all([
     element.remove();
   });
 
-  let markdownBody = turndownService.turndown(currentElement.outerHTML);
-
-  const imageMatches = markdownBody.match(/https?:\/\/([\w!\?/\-_=\.&%;:,])+/g);
-
-  try {
-    if (imageMatches) {
-      markdownBody = await processMatches(imageMatches, markdownBody);
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  const markdownBody = turndownService.turndown(currentElement.outerHTML);
 
   const fileContent = createObsidianHeader() + markdownBody;
 

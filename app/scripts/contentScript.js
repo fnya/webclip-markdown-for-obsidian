@@ -57,23 +57,6 @@ const minus = () => {
   }
 };
 
-// URL の画像ファイルを Base64 でエンコードする
-const getBase64FromUrl = async (url) => {
-  const data = await fetch(url);
-  const blob = await data.blob();
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = () => {
-      const base64data = reader.result;
-      resolve(base64data);
-    };
-    reader.onerror = () => {
-      reject(null);
-    };
-  });
-};
-
 // URL が画像かどうかを判定する
 const isImage = async (url) => {
   try {
@@ -260,7 +243,7 @@ const clip = async (message) => {
       }
 
       const imgae = getImageInfomaion(node);
-      const width = $(node).width();
+      const width = getImageWidth(node);
 
       if (width) {
         return `![${imgae.alt}|${width}](${getCorrectUrl(imgae.imageUrl)})`;
@@ -287,7 +270,7 @@ const clip = async (message) => {
           }
 
           const imageInformation = getImageInfomaion(image);
-          const width = $(image).width();
+          const width = getImageWidth(image);
 
           if (width) {
             response += `\n![${imageInformation.alt}|${width}](${getCorrectUrl(
@@ -332,19 +315,6 @@ const clip = async (message) => {
   // Markdown に変換する
   let markdownBody = turndownService.turndown(currentElement.outerHTML);
 
-  // 画像の URL を抽出する
-  const imageMatches = markdownBody.match(/https?:\/\/([\w!\?/\-_=\.&%;:,])+/g);
-
-  // 画像の URL を base64 に変換する
-  try {
-    if (imageMatches) {
-      markdownBody = await processMatches(imageMatches, markdownBody);
-    }
-  } catch (error) {
-    // エラーが出てもそのまま処理を継続する
-    console.error(error);
-  }
-
   // Obsidian に渡すデータを作成する
   const fileContent = createObsidianHeader(message) + markdownBody;
 
@@ -383,33 +353,6 @@ const getCorrectUrl = (url) => {
   }
 
   return correctUrl;
-};
-
-// 画像の URL を base64 に変換する
-const processMatches = async (matches, markdownBody) => {
-  const promises = matches.map(async (match) => {
-    const image = await isImage(match);
-    if (image) {
-      const base64String = await getBase64FromUrl(match);
-      return { match, base64String };
-    }
-    return null;
-  });
-
-  const results = await Promise.all(promises);
-
-  let replacedMarkdownBody = markdownBody;
-
-  results.forEach((result) => {
-    if (result && result.base64String) {
-      replacedMarkdownBody = replacedMarkdownBody.replaceAll(
-        result.match,
-        result.base64String
-      );
-    }
-  });
-
-  return replacedMarkdownBody;
 };
 
 // デフォルト要素をセットする
