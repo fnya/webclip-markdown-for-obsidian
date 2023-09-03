@@ -1,43 +1,45 @@
 ## WebClip Markdown for Obsidian
 
-`WebClip Markdown for Obsidian` は、Firefox 拡張機能の Obsidian 用 Web Clipper です。
+[Japanese](README_JAPANESE.md)
 
-Web ページを Markdown の形式に変換して、Obsidian に保存します。
+`WebClip Markdown for Obsidian` is a Web Clipper for Obsidian, a Firefox extension.
 
-画像や Twitter のツイートは、URL のままのため、元データが削除されれば参照できなくなるためご注意ください。
+It converts web pages to Markdown format and saves them in Obsidian.
 
-開発中の、[Media Sync](https://github.com/fnya/media-sync) という Obsidian のプラグインを使用すると、画像をローカルに保存できます。
+Note that images and Twitter tweets are still URLs, so they will no longer be available if the original data is deleted.
+
+The Obsidian plugin [Media Sync](https://github.com/fnya/media-sync) can be used to save images locally.
 
 ## Bookmarklet
 
-こちらの [Bookmarklet](bookmarklet.js) を使用すると、Web ページを Markdown の形式に変換して、Obsidian に保存することができます。
+This [Bookmarklet](bookmarklet.js) can be used to convert web pages into Markdown format and save them in Obsidian.
 
-Bookmarklet の下記箇所を修正してカスタマイズできます。
+You can customize it by modifying the following parts of the Bookmarklet.
 
 ```javascript
-/* when 'true', select full page  */
-const isFullPage = false; // true にするとページ全体を選択する
+/* when 'true', select full page */
+const isFullPage = false; // when true, select full page
 
 /* Optional vault name */
-const vault = ""; // Vault 名を指定できる
+const vault = ""; // Vault name can be specified
 
 /* Optional folder name such as "Clippings/" */
-const folder = ""; // デフォルトフォルダを指定できる
+const folder = ""; // can specify default folder
 ```
 
 ## iOS Shortcut
 
-iOS のショートカットは、次の手順で作成します。
+To create an iOS shortcut, follow the steps below.
 
-- ショートカットの新規作成から、「Web ページで JavaScript を実行」を選択し、用途に応じて以下のスクリプトを貼り付けます
+- From Create New Shortcut, select "Execute JavaScript on Web Page" and paste the following script according to your purpose
   - [ios-shortcut.js](ios-shortcut.js)
-    - Web ページの本文を選択して Markdown に変換し Obsidian に保存します
-- アプリの設定で「共有シートに表示」をオンにします
-- スクリプトの入力を「ショートカットの入力」に修正します
-- 設定のショートカットの詳細で、「スクリプトの実行」をオンにします
-- Safari で Web ページを開き、共有ボタンからショートカットを選択すると、Obsidian に Web ページを Markdown で保存できます
+    - Select the body of the web page, convert it to Markdown and save it in Obsidian
+- Turn on "Show in shared sheets" in the app settings
+- Modify the script entry to "Enter shortcut".
+- Turn on "Run scripts" in the shortcut details of the settings
+- Open the web page in Safari and select the shortcut from the Share button to save the web page in Obsidian as Markdown
 
-なお、カスタマイズ方法は、Bookmarklet と同様です。
+The customization procedure is the same as for Bookmarklet.
 
 ## Open Source
 
