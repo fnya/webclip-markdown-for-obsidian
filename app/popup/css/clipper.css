@@ -34,3 +34,32 @@ li {
   margin: 0;
   padding: 0;
 }
+
+.image-container {
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+.default-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.hover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: none;
+}
+
+.image-container:hover .default-image {
+  display: none;
+}
+
+.image-container:hover .hover-image {
+  display: block;
+}
