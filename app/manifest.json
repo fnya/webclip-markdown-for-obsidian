@@ -2,7 +2,7 @@
   "name": "WebClip Markdown for Obsidian",
   "description": "Web Clip a web page in Markdown and save it to Obsidian",
   "default_locale": "en",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "manifest_version": 2,
   "icons": {
     "48": "icons/clipper_48.png",
