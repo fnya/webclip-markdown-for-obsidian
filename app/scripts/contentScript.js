@@ -140,11 +140,12 @@ const createObsidianHeader = (message) => {
     .split(",")
     .map((tag) => `${tag.trim()}`)
     .filter((tag) => tag !== "")
-    .map((tag) => `#${tag} `)
-    .join(" ");
+    .map((tag) => `"#${tag}"`)
+    .join(",");
 
   const now = new Date();
   return (
+    "---\n" +
     "Cliped: " +
     now.getFullYear() +
     "-" +
@@ -159,7 +160,8 @@ const createObsidianHeader = (message) => {
     "Source: " +
     document.URL +
     "\n" +
-    `Tags: ${saveTags}\n\n\n`
+    `Tags: [${saveTags}]\n` +
+    "---\n\n"
   );
 };
 
