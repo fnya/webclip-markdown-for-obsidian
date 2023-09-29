@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/clipper.css" />
+    <link rel="stylesheet" href="css/tagger.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-icons.css" />
+  </head>
+
+  <body>
+    <div class="container m-2 clipperContainer">
+      <div class="mb-2 mt-2">
+        <input
+          type="radio"
+          class="btn-check"
+          name="selectRange"
+          autocomplete="off"
+          id="selectArticleRange"
+          checked
+        />
+        <label
+          class="btn btn-outline-primary radioButtonLabel text-start"
+          for="selectArticleRange"
+          >Select article range</label
+        >
+        <div>
+          <img
+            src="images/plus-square.svg"
+            class="default-image-plus"
+            id="default-image-plus"
+          />
+          <img
+            src="images/plus-square-fill.svg"
+            class="hover-image-plus"
+            id="hover-image-plus"
+          />
+          <img
+            src="images/dash-square.svg"
+            class="default-image-minus"
+            id="default-image-minus"
+          />
+          <img
+            src="images/dash-square-fill.svg"
+            class="hover-image-minus"
+            id="hover-image-minus"
+          />
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <input
+          type="radio"
+          class="btn-check"
+          name="selectRange"
+          id="selectAll"
+          autocomplete="off"
+        />
+        <label
+          class="btn btn-outline-primary radioButtonLabel text-start"
+          for="selectAll"
+          >Select all</label
+        >
+      </div>
+      <div class="mb-4">
+        <input
+          type="radio"
+          class="btn-check"
+          name="selectRange"
+          id="bookmark"
+          autocomplete="off"
+        />
+        <label
+          class="btn btn-outline-primary radioButtonLabel text-start"
+          for="bookmark"
+          >Bookmark</label
+        >
+      </div>
+
+      <div class="mb-2">
+        <label for="vault" class="form-label"
+          >Vault:<span style="color: crimson; font-size: small"
+            >* required</span
+          ></label
+        >
+        <input
+          type="text"
+          class="form-control w-100 p-1"
+          id="vault"
+          placeholder=""
+        />
+      </div>
+      <div class="mb-2">
+        <label for="vault" class="form-label"
+          >Default folder:<span style="color: crimson; font-size: small"
+            >* required</span
+          ></label
+        >
+        <input type="text" class="form-control w-100 p-1" id="defaultFolder" />
+      </div>
+      <div class="mb-2">
+        <label for="tags" class="form-label">Tags:</label>
+        <div class="w-100">
+          <input type="text" class="form-control" id="tags" />
+        </div>
+      </div>
+
+      <div class="mb-2">
+        <label for="comment" class="form-label form-label"> Comment:</label>
+        <textarea
+          rows="1"
+          class="form-control form-control w-100 p-1"
+          type="text"
+          id="comment"
+        ></textarea>
+      </div>
+      <div class="w-100">
+        <button type="button" class="btn btn-primary w-100" id="clip">
+          Clip
+        </button>
+      </div>
+    </div>
+
+    <script src="js/tagger.js"></script>
+    <script src="js/clipper.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

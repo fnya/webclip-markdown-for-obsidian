@@ -1,7 +1,6 @@
 const selectedBorderStyle = "solid 5px blue";
 let currentElement;
 
-// 選択範囲プラス
 const plus = () => {
   if (currentElement && currentElement.parentElement !== document.body) {
     currentElement.style.border = "";
@@ -10,7 +9,6 @@ const plus = () => {
   }
 };
 
-// 選択範囲マイナス
 const minus = () => {
   const allowIdsOrClasses = [
     "container",
@@ -25,7 +23,6 @@ const minus = () => {
     let childeElement;
 
     for (const child of currentElement.children) {
-      // id チェック
       if (child.id) {
         allowIdsOrClasses.forEach((allowIdOrClass) => {
           if (child.id.indexOf(allowIdOrClass) !== -1) {
@@ -33,7 +30,6 @@ const minus = () => {
           }
         });
       }
-      // class チェック
       if (child.className) {
         allowIdsOrClasses.forEach((allowIdOrClass) => {
           if (child.className.indexOf(allowIdOrClass) !== -1) {
@@ -57,13 +53,11 @@ const minus = () => {
   }
 };
 
-// URL が画像かどうかを判定する
 const isImage = async (url) => {
   try {
     let response = await fetch(url, { method: "HEAD" });
     let contentType = response.headers.get("content-type");
 
-    // SVG は対象外
     if (contentType && contentType.startsWith("image/svg")) {
       return false;
     }
@@ -75,7 +69,6 @@ const isImage = async (url) => {
   }
 };
 
-// 画像の情報を取得する
 const getImageInfomaion = (node) => {
   let imageUrl = "";
 
@@ -96,7 +89,6 @@ const getImageInfomaion = (node) => {
   return { imageUrl, alt };
 };
 
-// 画像のサイズを取得する
 const getImageWidth = (node) => {
   let width;
 
@@ -111,8 +103,7 @@ const getImageWidth = (node) => {
   return width;
 };
 
-// タイトルの正規化を行う
-const getTitle = () => {
+const getNomalizedTitle = () => {
   return (
     document.title
       // for Mac
@@ -129,12 +120,10 @@ const getTitle = () => {
   );
 };
 
-// 前ゼロ埋め
 const paddingZero = (num, paddingLength) => {
   return ("0".repeat(paddingLength) + num.toString()).slice(paddingLength * -1);
 };
 
-// Obsidian のヘッダーを作成する
 const createObsidianHeader = (message) => {
   const saveTags = message.tags
     .split(",")
@@ -161,11 +150,11 @@ const createObsidianHeader = (message) => {
     document.URL +
     "\n" +
     `Tags: [${saveTags}]\n` +
+    `Comment: ${message.comment}\n` +
     "---\n\n"
   );
 };
 
-// メッセージのエラーをチェックする
 const hasMessageError = (message) => {
   if (message.vault === "") {
     alert("Please set the vault name.");
@@ -179,20 +168,14 @@ const hasMessageError = (message) => {
   return false;
 };
 
-// bookmark 処理を行う
 const bookmark = (message) => {
-  // エラーチェック
   if (hasMessageError(message)) {
     return;
   }
 
-  // タイトルを取得する
-  const title = getTitle();
-
-  // Obsidian に渡すデータを作成する
+  const title = getNomalizedTitle();
   const fileContent = createObsidianHeader(message);
 
-  // Obsidian を起動する
   document.location.href =
     "obsidian://new?" +
     "&content=" +
@@ -204,9 +187,7 @@ const bookmark = (message) => {
     encodeURIComponent(title);
 };
 
-// clip ボタンのコールバック
 const clip = async (message) => {
-  // エラーチェック
   if (hasMessageError(message)) {
     return;
   }
@@ -222,7 +203,6 @@ const clip = async (message) => {
   turndownService.addRule("iframeTagsReplace", {
     filter: ["iframe"],
     replacement: (content, node) => {
-      // Twitter の埋め込み URL を返す
       if (
         node.attributes["src"] &&
         node.attributes["src"].value.indexOf("twitter.com") !== -1 &&
@@ -235,7 +215,6 @@ const clip = async (message) => {
     },
   });
 
-  // img タグはルールを使わないと変換できない
   // https://github.com/mixmark-io/turndown/issues/241
   turndownService.addRule("imageTagsReplace", {
     filter: ["img"],
@@ -301,10 +280,8 @@ const clip = async (message) => {
     },
   });
 
-  // 不要タグを除外する
   turndownService.remove(["script", "noscript", "head", "footer", "select"]);
 
-  // 非表示要素を除外する
   const allElements = currentElement.querySelectorAll("*");
   const hiddenElements = Array.from(allElements).filter((element) => {
     const style = window.getComputedStyle(element);
@@ -314,16 +291,14 @@ const clip = async (message) => {
     element.remove();
   });
 
-  // Markdown に変換する
+  // Convert to Markdown
   let markdownBody = turndownService.turndown(currentElement.outerHTML);
 
-  // Obsidian に渡すデータを作成する
+  // Create Obsidian data
   const fileContent = createObsidianHeader(message) + markdownBody;
 
-  // タイトルを取得する
-  const title = getTitle();
+  const title = getNomalizedTitle();
 
-  // Obsidian を起動する
   document.location.href =
     "obsidian://new?" +
     "&content=" +
@@ -335,21 +310,15 @@ const clip = async (message) => {
     encodeURIComponent(title);
 };
 
-// 正しい URL を取得する
 const getCorrectUrl = (url) => {
   let correctUrl = url;
   const siteUrl = new URL(document.URL);
 
-  // サイトの相対パスの場合は絶対パスに変換する
   if (url.startsWith("//")) {
     correctUrl = `${siteUrl.protocol}${url}`;
   } else if (url.startsWith("/")) {
     correctUrl = `${siteUrl.protocol}//${siteUrl.host}${url}`;
-  } else if (
-    // ページの相対パスの場合は絶対パスに変換する
-    !url.startsWith("http") &&
-    !url.startsWith("/")
-  ) {
+  } else if (!url.startsWith("http") && !url.startsWith("/")) {
     const slashIndex = document.URL.lastIndexOf("/");
     correctUrl = document.URL.substring(0, slashIndex + 1) + url;
   }
@@ -357,9 +326,7 @@ const getCorrectUrl = (url) => {
   return correctUrl;
 };
 
-// デフォルト要素をセットする
 const getCurrentElement = () => {
-  // ページの main 要素を取得する
   const idNegative =
     ':not([id*="side"])' +
     ':not([id*="logo"])' +
@@ -437,39 +404,33 @@ const getCurrentElement = () => {
   return document.body;
 };
 
-// 初期処理を実行する
 const initialize = () => {
-  // デフォルト要素をセットする
   currentElement = getCurrentElement();
 };
 
-// 全体を選択する
 const selectAll = () => {
   currentElement.style.border = "";
   currentElement = document.body;
   currentElement.style.border = selectedBorderStyle;
 };
 
-// Main 要素を選択する
 const selectArticle = () => {
   currentElement.style.border = "";
   currentElement = getCurrentElement();
   currentElement.style.border = selectedBorderStyle;
 };
 
-// unselect メッセージを受け取ったら要素の選択を解除する
 const unselect = () => {
   currentElement.style.border = "";
   plusButton.remove();
   minusButoon.remove();
 };
 
-// メッセージを受け取った処理を実行する
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === "select") {
     initialize();
   }
-  if (message.command === "selectArticle") {
+  if (message.command === "selectArticleRange") {
     selectArticle();
   }
   if (message.command === "plus") {
@@ -495,7 +456,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// 初期処理実行制御
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initialize);
 } else {

@@ -39,8 +39,8 @@ iOS のショートカットは、次の手順で作成します。
 
 なお、カスタマイズ方法は、Bookmarklet と同様です。
 
-## Open Source
+## Open Source Libraries
 
 - [turndown](https://github.com/mixmark-io/turndown)
 - [jcubic/tagger](https://github.com/jcubic/tagger)
-- [UIkit](https://getuikit.com/)
+- [Bootstrap](https://getbootstrap.com/)

@@ -41,8 +41,8 @@ To create an iOS shortcut, follow the steps below.
 
 The customization procedure is the same as for Bookmarklet.
 
-## Open Source
+## Open Source Libraries
 
 - [turndown](https://github.com/mixmark-io/turndown)
 - [jcubic/tagger](https://github.com/jcubic/tagger)
-- [UIkit](https://getuikit.com/)
+- [Bootstrap](https://getbootstrap.com/)

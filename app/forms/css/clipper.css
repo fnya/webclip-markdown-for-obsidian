@@ -1,0 +1,30 @@
+html,
+body {
+  width: 440px;
+  height: 600px;
+  font-size: 0.9em;
+  overflow-x: hidden;
+}
+
+.clipperContainer {
+  width: 400px !important;
+}
+
+.radioButtonLabel {
+  width: 100%;
+}
+
+.default-image-plus,
+.default-image-minus {
+  z-index: 1;
+  width: 20px;
+  margin-top: 4px;
+}
+
+.hover-image-plus,
+.hover-image-minus {
+  z-index: 0;
+  display: none;
+  width: 20px;
+  margin-top: 4px;
+}
