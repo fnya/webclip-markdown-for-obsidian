@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/options.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div>
+        <div
+          class="alert alert-danger d-none"
+          role="alert"
+          id="errorMessage"
+        ></div>
+        <div>
+          <div
+            class="alert alert-success d-none"
+            role="alert"
+            id="successMessage"
+          ></div>
+
+      </div>
+
+      <div class="mb-3">
+        <label for="DefaultTags" class="form-label">Default tags</label>
+        <div class="row">
+          <div class="col mb-2">
+            <input type="text" class="form-control" id="defaultTag" />
+          </div>
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="addDefaultTagButton"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="row">
+            <div class="col">
+              <ul class="list-group defaultTagContainer" id="defaultTags"></ul>
+            </div>
+
+            <div class="col">
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-primary mt-3 mb-1"
+                  id="deleteDefaltTagsButton"
+                >
+                  Delete
+                </button>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  id="deleteAllDefaltTagButton"
+                >
+                  Delete all
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-light col-2 me-2 mb-2"
+        id="resetButton"
+      >
+        Reset
+      </button>
+      <button type="button" class="btn btn-primary col-2 mb-2" id="saveButton">
+        Save
+      </button>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/options.js"></script>
+  </body>
+</html>

@@ -64,6 +64,14 @@ const loadSettings = async () => {
       document.getElementById("defaultFolder").value =
         defaultFolder.defaultFolder;
     }
+
+    // set default tags
+    const options = await browser.storage.local.get("options");
+    if (options && options.options && options.options.defaultTags) {
+      Array.from(options.options.defaultTags).forEach((tag) => {
+        taggerElement.add_tag(tag);
+      });
+    }
   } catch (error) {
     console.error(error);
   }
@@ -167,6 +175,9 @@ const initializeTagger = async () => {
     allow_duplicates: false,
     allow_spaces: false,
     wrap: true,
+    link: function (name) {
+      return false;
+    },
     completion: {
       list: [],
     },

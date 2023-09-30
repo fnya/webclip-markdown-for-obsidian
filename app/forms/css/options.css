@@ -1,0 +1,13 @@
+.overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.defaultTagContainer {
+  height: 220px;
+  width: 255px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

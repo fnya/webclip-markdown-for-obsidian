@@ -2,13 +2,12 @@
   "name": "WebClip Markdown for Obsidian",
   "description": "Web Clip a web page in Markdown and save it to Obsidian",
   "default_locale": "en",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "manifest_version": 2,
   "icons": {
     "48": "icons/clipper_48.png",
     "96": "icons/clipper_96.png"
   },
-
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
@@ -20,6 +19,10 @@
     "default_title": "WebClip Markdown for Obsidian",
     "default_popup": "forms/clipper.html",
     "default_icon": "icons/clipper_32.png"
+  },
+  "optional_permissions": ["*://*/"],
+  "options_ui": {
+    "page": "forms/options.html"
   },
   "permissions": ["activeTab", "<all_urls>", "storage"]
 }

@@ -48,7 +48,9 @@
 }
 .tagger > ul > li:not(.tagger-new) > span,
 .tagger > ul > li:not(.tagger-new) > a > span {
-  white-space: nowrap;
+  /* white-space: nowrap; */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 .tagger li a.close {
   padding: 4px;
