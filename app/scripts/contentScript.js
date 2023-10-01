@@ -70,13 +70,24 @@ const isImage = async (url) => {
 };
 
 const getImageInfomaion = (node) => {
-  let imageUrl = "";
+  let imageUrl;
 
   if (node.attributes["data-src"] && node.attributes["data-src"].value !== "") {
     imageUrl = node.attributes["data-src"].value;
   }
-  if (node.attributes["src"] && node.attributes["src"].value !== "") {
+  if (
+    !imageUrl &&
+    node.attributes["src"] &&
+    node.attributes["src"].value !== ""
+  ) {
     imageUrl = node.attributes["src"].value;
+  }
+  if (
+    !imageUrl &&
+    node.attributes["srcset"] &&
+    node.attributes["srcset"].value !== ""
+  ) {
+    imageUrl = node.attributes["srcset"].value;
   }
 
   let alt;
@@ -91,13 +102,18 @@ const getImageInfomaion = (node) => {
 
 const getImageWidth = (node) => {
   let width;
-
   if (node.attributes["width"] && node.attributes["width"].value > 0) {
     width = node.attributes["width"].value;
   } else if (node.style.width) {
     width = node.style.width;
   } else if (node.offsetWidth && node.offsetWidth > 0) {
     width = node.offsetWidth;
+  } else if (node.naturalWidth && node.naturalWidth > 0) {
+    width = node.naturalWidth;
+  } else if (node.clientWidth && node.clientWidth > 0) {
+    width = node.clientWidth;
+  } else if (node.getBoundingClientRect().width > 0) {
+    width = node.getBoundingClientRect().width;
   }
 
   return width;
@@ -209,6 +225,30 @@ const clip = async (message) => {
         node.attributes["data-tweet-id"]
       ) {
         return `![][https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value}]`;
+      }
+
+      return "";
+    },
+  });
+
+  turndownService.addRule("pictureTagsReplace", {
+    filter: ["picture"],
+    replacement: (content, node) => {
+      console.log("picture");
+      const sourceNodes = node.querySelector("source[type='image/jpg']");
+      console.log(sourceNodes);
+      if (sourceNodes && sourceNodes.length > 0) {
+        const imgae = getImageInfomaion(sourceNodes[0]);
+        const width = getImageWidth(sourceNodes[0]);
+
+        if (width) {
+          return `![${node.alt}|${width}](${getCorrectUrl(imgae.imageUrl)})`;
+        }
+        if (imgae.alt) {
+          return `![${node.alt}](${getCorrectUrl(imgae.imageUrl)})`;
+        }
+
+        return `![image](${getCorrectUrl(imgae.imageUrl)})`;
       }
 
       return "";
