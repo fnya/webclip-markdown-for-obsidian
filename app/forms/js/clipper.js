@@ -1,4 +1,7 @@
 let taggerElement;
+let defaultTags = [];
+let dictionalyTags = [];
+let useLernNewTags = false;
 
 document
   .getElementById("default-image-plus")
@@ -47,6 +50,26 @@ const saveSettings = async () => {
     if (defaultFolder && defaultFolder !== "") {
       await browser.storage.local.set({ defaultFolder: defaultFolder });
     }
+
+    if (useLernNewTags) {
+      const tags = document.getElementById("tags").value;
+      const optionsData = await browser.storage.local.get("options");
+
+      const addTags = tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== "")
+        .filter((tag) => !optionsData.options.dictionalyTags.includes(tag));
+
+      addTags.forEach((tag) => {
+        optionsData.options.dictionalyTags.push(tag);
+      });
+
+      optionsData.options.dictionalyTags =
+        optionsData.options.dictionalyTags.sort((a, b) => a.localeCompare(b));
+
+      await browser.storage.local.set({ options: optionsData.options });
+    }
   } catch (error) {
     console.error(error);
   }
@@ -57,20 +80,28 @@ const loadSettings = async () => {
     const vault = await browser.storage.local.get("vault");
     const defaultFolder = await browser.storage.local.get("defaultFolder");
 
-    if (vault && vault.vault) {
+    if (vault?.vault) {
       document.getElementById("vault").value = vault.vault;
     }
-    if (defaultFolder && defaultFolder.defaultFolder) {
+    if (defaultFolder?.defaultFolder) {
       document.getElementById("defaultFolder").value =
         defaultFolder.defaultFolder;
     }
 
-    // set default tags
     const options = await browser.storage.local.get("options");
-    if (options && options.options && options.options.defaultTags) {
-      Array.from(options.options.defaultTags).forEach((tag) => {
-        taggerElement.add_tag(tag);
-      });
+
+    if (options?.options?.defaultTags) {
+      defaultTags = options.options.defaultTags;
+    }
+
+    if (options?.options?.dictionalyTags) {
+      if (options?.options?.useAutocomplete) {
+        dictionalyTags = options.options.dictionalyTags;
+      }
+    }
+
+    if (options?.options?.useLernNewTags) {
+      useLernNewTags = options.options.useLernNewTags;
     }
   } catch (error) {
     console.error(error);
@@ -170,7 +201,10 @@ window.addEventListener("blur", () => {
 
 // initialize tagger
 const initializeTagger = async () => {
+  await loadSettings();
+
   const tagsElement = document.getElementById("tags");
+
   taggerElement = tagger(tagsElement, {
     allow_duplicates: false,
     allow_spaces: false,
@@ -179,11 +213,13 @@ const initializeTagger = async () => {
       return false;
     },
     completion: {
-      list: [],
+      list: [...dictionalyTags],
     },
   });
 
-  await loadSettings();
+  Array.from(defaultTags).forEach((tag) => {
+    taggerElement.add_tag(tag);
+  });
 };
 
 const initialSelectArticleRange = () => {

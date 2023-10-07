@@ -22,65 +22,152 @@
             role="alert"
             id="successMessage"
           ></div>
-
-      </div>
-
-      <div class="mb-3">
-        <label for="DefaultTags" class="form-label">Default tags</label>
-        <div class="row">
-          <div class="col mb-2">
-            <input type="text" class="form-control" id="defaultTag" />
-          </div>
-          <div class="col">
-            <button
-              type="button"
-              class="btn btn-primary"
-              id="addDefaultTagButton"
-            >
-              Add
-            </button>
-          </div>
         </div>
-        <div>
+
+        <div class="mb-5">
+          <label for="DefaultTags" class="form-label settingTitle"
+            >Default tags</label
+          >
           <div class="row">
-            <div class="col">
-              <ul class="list-group defaultTagContainer" id="defaultTags"></ul>
+            <div class="col mb-2">
+              <input type="text" class="form-control" id="defaultTag" />
             </div>
-
             <div class="col">
-              <div>
-                <button
-                  type="button"
-                  class="btn btn-primary mt-3 mb-1"
-                  id="deleteDefaltTagsButton"
-                >
-                  Delete
-                </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="addDefaultTagButton"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col">
+                <ul class="list-group tagContainer" id="defaultTags"></ul>
               </div>
-              <div>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  id="deleteAllDefaltTagButton"
-                >
-                  Delete all
-                </button>
+
+              <div class="col">
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary mt-3 mb-1"
+                    id="deleteDefaltTagsButton"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="deleteAllDefaltTagButton"
+                  >
+                    Delete all
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <button
-        type="button"
-        class="btn btn-light col-2 me-2 mb-2"
-        id="resetButton"
-      >
-        Reset
-      </button>
-      <button type="button" class="btn btn-primary col-2 mb-2" id="saveButton">
-        Save
-      </button>
+        <div class="mb-5">
+          <label for="tags" class="form-label settingTitle">Autocomplete</label>
+
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="useAutocomplete"
+            />
+            <label class="form-check-label" for="useAutocomplete">
+              Enable autocomplete
+            </label>
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="useLernNewTags"
+            />
+            <label class="form-check-label" for="useLernNewTags">
+              Learn new tags
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="tags" class="form-label settingTitle"
+            >Dictionary tags</label
+          >
+          <div class="discription mb-3">*Tags to be used in autocomplete.</div>
+          <div class="row">
+            <div class="col mb-2">
+              <input type="text" class="form-control" id="tags" />
+              <div class="discription">
+                *If you enter multiple tags, please separate them with a single
+                space character.
+              </div>
+            </div>
+            <div class="col">
+              <button
+                type="button"
+                class="btn btn-primary"
+                id="addDictionalyTagsButton"
+              >
+                Add new tags
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="row">
+              <div class="col">
+                <ul class="list-group tagContainer" id="dictionayTags"></ul>
+              </div>
+
+              <div class="col">
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary mt-3 mb-1"
+                    id="deleteDictionalyTagButton"
+                  >
+                    Delete
+                  </button>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="deleteAllDictionalyTagsButton"
+                  >
+                    Delete all
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-light col-2 me-2 mb-2"
+          id="resetButton"
+        >
+          Reset
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary col-2 mb-2"
+          id="saveButton"
+        >
+          Save
+        </button>
+      </div>
     </div>
 
     <script src="js/bootstrap.bundle.min.js"></script>
