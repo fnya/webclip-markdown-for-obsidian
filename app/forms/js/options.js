@@ -76,22 +76,19 @@ const addDictionalyTag = () => {
 
   const tags = Array.from(newTags.value.split(" ")).filter((tag) => tag !== "");
 
-  const existTag = options.dictionalyTags.some((tag) => tags.includes(tag));
-  if (existTag) {
-    const alertMessage = document.getElementById("errorMessage");
-    alertMessage.className = "alert alert-danger";
-    alertMessage.textContent = "Dictionaly tag already exist.";
-
-    setTimeout(() => {
-      alertMessage.className = "alert alert-danger d-none";
-    }, 3000); // after 3 seconds hide alert message
-
-    return;
-  }
+  let addedTags = [];
 
   tags.forEach((tag) => {
-    options.dictionalyTags.push(tag);
+    const existTag = options.dictionalyTags.some(
+      (dictionalyTag) => dictionalyTag === tag
+    );
+
+    if (!existTag) {
+      addedTags.push(tag);
+    }
   });
+
+  options.dictionalyTags = options.dictionalyTags.concat(addedTags);
 
   newTags.value = "";
 
