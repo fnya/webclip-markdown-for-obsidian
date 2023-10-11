@@ -382,7 +382,7 @@ const getCurrentElement = () => {
     ':not([id*="storycard"])' +
     ':not([id*="mhMain"])' +
     ':not([id*="voice"])' +
-    ":not(script)";
+    ':not([id*="mainContentsStart"])';
 
   const classNegative =
     ':not([class*="side"])' +
@@ -399,41 +399,71 @@ const getCurrentElement = () => {
     ':not([class*="storycard"])' +
     ':not([class*="mhMain"])' +
     ':not([class*="voice"])' +
-    ":not(script)";
+    ':not([class*="mainContentsStart"])';
 
-  let elements = document.querySelectorAll('[id*="main"]' + idNegative);
+  const excludeTags =
+    ":not(script)" +
+    ":not(a)" +
+    ":not(ul)" +
+    ":not(li)" +
+    ":not(nav)" +
+    ":not(head)";
+
+  let elements = document.querySelectorAll(
+    '[id*="main"]' + idNegative + excludeTags
+  );
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="Main"]' + idNegative);
+    elements = document.querySelectorAll(
+      '[id*="Main"]' + idNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll("article" + classNegative);
+    elements = document.querySelectorAll(
+      "article" + classNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[class*="main"]' + classNegative);
+    elements = document.querySelectorAll(
+      '[class*="main"]' + classNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.getElementsByTagName("main");
+    elements = document.querySelectorAll("main" + classNegative + excludeTags);
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="article"]' + idNegative);
+    elements = document.querySelectorAll(
+      '[id*="article"]' + idNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="News"]' + idNegative);
+    elements = document.querySelectorAll(
+      '[id*="News"]' + idNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="news"]' + idNegative);
+    elements = document.querySelectorAll(
+      '[id*="news"]' + idNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[id*="content"]' + idNegative);
+    elements = document.querySelectorAll(
+      '[id*="content"]' + idNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[class*="News"]' + classNegative);
+    elements = document.querySelectorAll(
+      '[class*="News"]' + classNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[class*="news"]' + classNegative);
+    elements = document.querySelectorAll(
+      '[class*="news"]' + classNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll('[class*="content"]' + classNegative);
+    elements = document.querySelectorAll(
+      '[class*="content"]' + classNegative + excludeTags
+    );
   }
   if (!elements || elements.length === 0) {
     elements = document.querySelectorAll('[class*="day"]');
