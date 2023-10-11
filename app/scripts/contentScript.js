@@ -381,6 +381,7 @@ const getCurrentElement = () => {
     ':not([id*="thumbnail"])' +
     ':not([id*="storycard"])' +
     ':not([id*="mhMain"])' +
+    ':not([id*="voice"])' +
     ":not(script)";
 
   const classNegative =
@@ -397,6 +398,7 @@ const getCurrentElement = () => {
     ':not([class*="thumbnail"])' +
     ':not([class*="storycard"])' +
     ':not([class*="mhMain"])' +
+    ':not([class*="voice"])' +
     ":not(script)";
 
   let elements = document.querySelectorAll('[id*="main"]' + idNegative);
