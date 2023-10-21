@@ -14,6 +14,8 @@ javascript: Promise.all([
   /* Numeric-only tags will not work due to Obsidian specifications.*/
   let tags = "";
 
+  const skipClasses = [];
+
   const newWindow = window.open("", "newWindow", "width=400,height=520");
 
   newWindow.document.write(`
@@ -452,7 +454,23 @@ javascript: Promise.all([
 
     turndownService.remove(["script", "noscript", "head", "footer", "select"]);
 
-    const allElements = currentElement.querySelectorAll("*");
+    const targetElements = currentElement.cloneNode(true);
+
+    if (
+      skipClasses.some((skipClass) => document.URL.startsWith(skipClass.url))
+    ) {
+      const skipClassesDefinision = skipClasses.find((skipClass) =>
+        document.URL.startsWith(skipClass.url)
+      );
+
+      skipClassesDefinision.classes.forEach((skipClass) => {
+        targetElements
+          .querySelectorAll(`.${skipClass}`)
+          .forEach((element) => element.remove());
+      });
+    }
+
+    const allElements = targetElements.querySelectorAll("*");
     const hiddenElements = Array.from(allElements).filter((element) => {
       const style = window.getComputedStyle(element);
       return style.display === "none" || style.visibility === "hidden";
@@ -461,7 +479,7 @@ javascript: Promise.all([
       element.remove();
     });
 
-    let markdownBody = turndownService.turndown(currentElement.outerHTML);
+    let markdownBody = turndownService.turndown(targetElements.outerHTML);
 
     const fileContent = createObsidianHeader() + markdownBody;
 
