@@ -321,7 +321,14 @@ const clip = async (message) => {
     },
   });
 
-  turndownService.remove(["script", "noscript", "head", "footer", "select"]);
+  turndownService.remove([
+    "script",
+    "noscript",
+    "head",
+    "footer",
+    "select",
+    "style",
+  ]);
 
   const targetElements = currentElement.cloneNode(true);
 

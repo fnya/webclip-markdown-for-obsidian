@@ -371,7 +371,14 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
       },
     });
 
-    turndownService.remove(["script", "noscript", "head", "footer", "select"]);
+    turndownService.remove([
+      "script",
+      "noscript",
+      "head",
+      "footer",
+      "select",
+      "style",
+    ]);
 
     const targetElements = currentElement.cloneNode(true);
 
