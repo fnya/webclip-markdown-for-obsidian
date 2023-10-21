@@ -1,5 +1,6 @@
 const selectedBorderStyle = "solid 5px blue";
 let currentElement;
+let skipClasses = [];
 
 const plus = () => {
   if (currentElement && currentElement.parentElement !== document.body) {
@@ -322,7 +323,22 @@ const clip = async (message) => {
 
   turndownService.remove(["script", "noscript", "head", "footer", "select"]);
 
-  const allElements = currentElement.querySelectorAll("*");
+  const targetElements = currentElement.cloneNode(true);
+
+  // Remove skip classes
+  if (skipClasses.some((skipClass) => document.URL.startsWith(skipClass.url))) {
+    const skipClassesDefinision = skipClasses.find((skipClass) =>
+      document.URL.startsWith(skipClass.url)
+    );
+
+    skipClassesDefinision.classes.forEach((skipClass) => {
+      targetElements
+        .querySelectorAll(`.${skipClass}`)
+        .forEach((element) => element.remove());
+    });
+  }
+
+  const allElements = targetElements.querySelectorAll("*");
   const hiddenElements = Array.from(allElements).filter((element) => {
     const style = window.getComputedStyle(element);
     return style.display === "none" || style.visibility === "hidden";
@@ -332,7 +348,7 @@ const clip = async (message) => {
   });
 
   // Convert to Markdown
-  let markdownBody = turndownService.turndown(currentElement.outerHTML);
+  let markdownBody = turndownService.turndown(targetElements.outerHTML);
 
   // Create Obsidian data
   const fileContent = createObsidianHeader(message) + markdownBody;
@@ -476,8 +492,23 @@ const getCurrentElement = () => {
   return document.body;
 };
 
-const initialize = () => {
+const initialize = async () => {
   currentElement = getCurrentElement();
+
+  try {
+    const options = await browser.storage.local.get("options");
+
+    if (options?.options?.skipClasses) {
+      Array.from(options.options.skipClasses).forEach((skipClass) => {
+        skipClasses.push({
+          url: skipClass.url,
+          classes: skipClass.classes.split(" "),
+        });
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const selectAll = () => {

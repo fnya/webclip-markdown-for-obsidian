@@ -18,7 +18,18 @@
   font-weight: bold;
 }
 
+.settingSubTitle {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
 .discription {
   font-size: 0.8em;
   color: gray;
+  width: 255px;
+}
+
+.skipClassesLabel {
+  overflow-x: hidden;
+  overflow-y: auto;
 }

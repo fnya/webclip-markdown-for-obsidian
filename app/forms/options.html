@@ -153,6 +153,92 @@
           </div>
         </div>
 
+          <div>
+            <div class="mb-3 mt-3">
+              <label for="tags" class="form-label settingTitle"
+                >Skip stylesheet classes settings</label
+              >
+              <div class="discription mb-3">
+                *Skip loading elements with a combination of URL and stylesheet
+                classes.
+              </div>
+              <div class="row">
+                <div class="col mb-2">
+                  <div>
+                    <label for="skipUrl" class="form-label settingSubTitle"
+                      >URL</label
+                    >
+                    <input type="text" class="form-control" id="skipUrl" />
+                  </div>
+                  <div>
+                    <label for="skipClasses" class="form-label settingSubTitle"
+                      >Classes</label
+                    >
+
+                    <input type="text" class="form-control" id="skipClasses" />
+
+                    <div class="discription">
+                      *If you enter multiple classes, please separate them with
+                      a single space character.
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    id="addSkipClassesButton"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="col">
+                    <ul
+                      class="list-group tagContainer"
+                      id="skipClassesArea"
+                    ></ul>
+                  </div>
+
+                  <div class="col">
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-primary mt-3 mb-1"
+                        id="deleteSkipClassesButton"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="deleteAllSkipClassesButton"
+                      >
+                        Delete all
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+        <div
+          class="alert alert-danger d-none"
+          role="alert"
+          id="errorMessageBottom"
+        ></div>
+        <div>
+          <div
+            class="alert alert-success d-none"
+            role="alert"
+            id="successMessageBottom"
+          ></div>
+        </div>
         <button
           type="button"
           class="btn btn-light col-2 me-2 mb-2"
