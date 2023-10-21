@@ -25,6 +25,25 @@ const vault = ""; // Vault name can be specified
 
 /* Optional folder name such as "Clippings/" */
 const folder = ""; // can specify default folder
+
+/* Optional skip URL and classes */
+const skipClasses = []; // Elements can be skipped using a combination of URL and class name
+
+/* example
+
+const skipClasses = [
+  {
+    url: "https://example.com",
+    classes: [
+      "module--detail-morenews",
+      "module--share"
+    ],
+  },
+  {
+    url:  "https://news.example.com",
+    classes: ["snsButton", "articleButton"],
+  },
+*/
 ```
 
 ## iOS Shortcut

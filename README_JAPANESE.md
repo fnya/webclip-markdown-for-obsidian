@@ -23,6 +23,25 @@ const vault = ""; // Vault 名を指定できる
 
 /* Optional folder name such as "Clippings/" */
 const folder = ""; // デフォルトフォルダを指定できる
+
+/* Optional skip URL and classes */
+const skipClasses = []; // URL と class 名の組み合わせで要素をスキップできる
+
+/* example
+
+const skipClasses = [
+  {
+    url: "https://example.com",
+    classes: [
+      "module--detail-morenews",
+      "module--share"
+    ],
+  },
+  {
+    url:  "https://news.example.com",
+    classes: ["snsButton", "articleButton"],
+  },
+*/
 ```
 
 ## iOS Shortcut
