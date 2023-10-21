@@ -15,6 +15,8 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
     /* Numeric-only tags will not work due to Obsidian specifications.*/
     const tags = "";
 
+    const skipClasses = [];
+
     const getCurrentElement = () => {
       if (isFullPage) {
         return document.body;
@@ -371,7 +373,23 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
 
     turndownService.remove(["script", "noscript", "head", "footer", "select"]);
 
-    const allElements = currentElement.querySelectorAll("*");
+    const targetElements = currentElement.cloneNode(true);
+
+    if (
+      skipClasses.some((skipClass) => document.URL.startsWith(skipClass.url))
+    ) {
+      const skipClassesDefinision = skipClasses.find((skipClass) =>
+        document.URL.startsWith(skipClass.url)
+      );
+
+      skipClassesDefinision.classes.forEach((skipClass) => {
+        targetElements
+          .querySelectorAll(`.${skipClass}`)
+          .forEach((element) => element.remove());
+      });
+    }
+
+    const allElements = targetElements.querySelectorAll("*");
     const hiddenElements = Array.from(allElements).filter((element) => {
       const style = window.getComputedStyle(element);
       return style.display === "none" || style.visibility === "hidden";
@@ -380,7 +398,7 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
       element.remove();
     });
 
-    let markdownBody = turndownService.turndown(currentElement.outerHTML);
+    let markdownBody = turndownService.turndown(targetElements.outerHTML);
 
     const fileContent = createObsidianHeader() + markdownBody;
 
