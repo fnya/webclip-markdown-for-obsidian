@@ -14,6 +14,8 @@ The Obsidian plugin [Media Sync](https://github.com/fnya/media-sync) can be used
 
 This [Bookmarklet](bookmarklet.js) can be used to convert web pages into Markdown format and save them in Obsidian.
 
+The bookmarklet has been tested with Google Chrome, Safari and Firefox on Mac; Microsoft Edge only works with full screen (isFullPage = true).
+
 You can customize it by modifying the following parts of the Bookmarklet.
 
 ```javascript

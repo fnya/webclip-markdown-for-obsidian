@@ -12,6 +12,8 @@ Web ページを Markdown の形式に変換して、Obsidian に保存します
 
 こちらの [Bookmarklet](bookmarklet.js) を使用すると、Web ページを Markdown の形式に変換して、Obsidian に保存することができます。
 
+Bookmarklet は、Mac の Google Chrome と Safari と Firefox で動作確認済みです。Microsoft Edge はフル画面(isFullPage = true)の場合のみ動作します。
+
 Bookmarklet の下記箇所を修正してカスタマイズできます。
 
 ```javascript
