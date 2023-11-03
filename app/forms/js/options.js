@@ -1,6 +1,8 @@
 const DEFAULT_TAG_PREFIX = "defaultTag";
 const DICTIONAY_TAG_PREFIX = "dictionalyTag";
 const SKIP_CLASSES_PREFIX = "skipClasses";
+const SELECT_IDS_CLASSES_PREFIX = "selectIdsClasses";
+const EXCLUDE_IDS_CLASSES_PREFIX = "excludeIdsClasses";
 let options = {};
 
 const createTagItem = (tag, prefix) => {
@@ -233,6 +235,118 @@ const addSkipClasses = () => {
   showSkipClasses();
 };
 
+const clearSelectIdsOrClasses = () => {
+  const selectIdsOrClasses = document.querySelectorAll(
+    `input[name="${SELECT_IDS_CLASSES_PREFIX}"]`
+  );
+  Array.from(selectIdsOrClasses).forEach((selectIdsOrClass) => {
+    selectIdsOrClass.parentNode.remove();
+  });
+};
+
+const showSelectIdsOrClasses = () => {
+  const selectIdsOrClassesArea = document.getElementById(
+    "selectIdsOrClassesArea"
+  );
+
+  Array.from(options.selectIdsOrClasses).forEach((selectIdsOrClass) => {
+    selectIdsOrClassesArea.appendChild(
+      createTagItem(selectIdsOrClass, SELECT_IDS_CLASSES_PREFIX)
+    );
+  });
+};
+
+const addSelectIdsOrClasses = () => {
+  const newSelectIdsOrClasses = document.getElementById("selectIdsOrClasses");
+
+  if (!newSelectIdsOrClasses.value) {
+    return;
+  }
+
+  const existSelectIdsOrClasses = options.selectIdsOrClasses.some(
+    (selectIdsOrClass) => selectIdsOrClass === newSelectIdsOrClasses.value
+  );
+  if (existSelectIdsOrClasses) {
+    const alertMessage = document.getElementById("errorMessage");
+    alertMessage.className = "alert alert-danger";
+    alertMessage.textContent = "Select element ids or classes already exist.";
+
+    const alertMessageBottom = document.getElementById("errorMessageBottom");
+    alertMessageBottom.className = "alert alert-danger";
+    alertMessageBottom.textContent =
+      "Select element ids or classes already exist.";
+
+    setTimeout(() => {
+      alertMessage.className = "alert alert-danger d-none";
+      alertMessageBottom.className = "alert alert-danger d-none";
+    }, 3000); // after 3 seconds hide alert message
+
+    return;
+  }
+
+  options.selectIdsOrClasses.push(newSelectIdsOrClasses.value);
+  newSelectIdsOrClasses.value = "";
+
+  clearSelectIdsOrClasses();
+  showSelectIdsOrClasses();
+};
+
+const clearExcludeIdsOrClasses = () => {
+  const excludeIdsOrClasses = document.querySelectorAll(
+    `input[name="${EXCLUDE_IDS_CLASSES_PREFIX}"]`
+  );
+  Array.from(excludeIdsOrClasses).forEach((excludeIdsOrClass) => {
+    excludeIdsOrClass.parentNode.remove();
+  });
+};
+
+const showExcludeIdsOrClasses = () => {
+  const excludeIdsOrClassesArea = document.getElementById(
+    "excludeIdsOrClassesArea"
+  );
+
+  Array.from(options.excludeIdsOrClasses).forEach((excludeIdsOrClass) => {
+    excludeIdsOrClassesArea.appendChild(
+      createTagItem(excludeIdsOrClass, EXCLUDE_IDS_CLASSES_PREFIX)
+    );
+  });
+};
+
+const addExcludeIdsOrClasses = () => {
+  const newExcludeIdsOrClasses = document.getElementById("excludeIdsOrClasses");
+
+  if (!newExcludeIdsOrClasses.value) {
+    return;
+  }
+
+  const existExcludeIdsOrClasses = options.excludeIdsOrClasses.some(
+    (excludeIdsOrClass) => excludeIdsOrClass === newExcludeIdsOrClasses.value
+  );
+  if (existExcludeIdsOrClasses) {
+    const alertMessage = document.getElementById("errorMessage");
+    alertMessage.className = "alert alert-danger";
+    alertMessage.textContent = "Exclude element ids or classes already exist.";
+
+    const alertMessageBottom = document.getElementById("errorMessageBottom");
+    alertMessageBottom.className = "alert alert-danger";
+    alertMessageBottom.textContent =
+      "Exclude element ids or classes already exist.";
+
+    setTimeout(() => {
+      alertMessage.className = "alert alert-danger d-none";
+      alertMessageBottom.className = "alert alert-danger d-none";
+    }, 3000); // after 3 seconds hide alert message
+
+    return;
+  }
+
+  options.excludeIdsOrClasses.push(newExcludeIdsOrClasses.value);
+  newExcludeIdsOrClasses.value = "";
+
+  clearExcludeIdsOrClasses();
+  showExcludeIdsOrClasses();
+};
+
 document.getElementById("saveButton").addEventListener("click", async () => {
   if (options.defaultTags) {
     options.defaultTags = options.defaultTags.sort((a, b) =>
@@ -408,6 +522,92 @@ document
     showSkipClasses();
   });
 
+document
+  .getElementById("addSelectIdsOrClassesButton")
+  .addEventListener("click", () => {
+    addSelectIdsOrClasses();
+  });
+
+document
+  .getElementById("selectIdsOrClasses")
+  .addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      addSelectIdsOrClasses();
+    }
+  });
+
+document
+  .getElementById("deleteSelectIdsOrClassesButton")
+  .addEventListener("click", () => {
+    const targets = document.querySelectorAll(
+      `input[name="${SELECT_IDS_CLASSES_PREFIX}"]:checked`
+    );
+
+    if (targets) {
+      const filteredSelectIdsOrClasses = options.selectIdsOrClasses.filter(
+        (selectIdsOrClass) => {
+          return !Array.from(targets).some((target) => {
+            return target.id === SELECT_IDS_CLASSES_PREFIX + selectIdsOrClass;
+          });
+        }
+      );
+      options.selectIdsOrClasses = filteredSelectIdsOrClasses;
+      clearSelectIdsOrClasses();
+      showSelectIdsOrClasses();
+    }
+  });
+
+document
+  .getElementById("deleteAllSelectIdsOrClassesButton")
+  .addEventListener("click", () => {
+    options.selectIdsOrClasses = [];
+    clearSelectIdsOrClasses();
+    showSelectIdsOrClasses();
+  });
+
+document
+  .getElementById("addExcludeIdsOrClassesButton")
+  .addEventListener("click", () => {
+    addExcludeIdsOrClasses();
+  });
+
+document
+  .getElementById("excludeIdsOrClasses")
+  .addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      addExcludeIdsOrClasses();
+    }
+  });
+
+document
+  .getElementById("deleteExcludeIdsOrClassesButton")
+  .addEventListener("click", () => {
+    const targets = document.querySelectorAll(
+      `input[name="${EXCLUDE_IDS_CLASSES_PREFIX}"]:checked`
+    );
+
+    if (targets) {
+      const filteredExcludeIdsOrClasses = options.excludeIdsOrClasses.filter(
+        (excludeIdsOrClass) => {
+          return !Array.from(targets).some((target) => {
+            return target.id === EXCLUDE_IDS_CLASSES_PREFIX + excludeIdsOrClass;
+          });
+        }
+      );
+      options.excludeIdsOrClasses = filteredExcludeIdsOrClasses;
+      clearExcludeIdsOrClasses();
+      showExcludeIdsOrClasses();
+    }
+  });
+
+document
+  .getElementById("deleteAllExcludeIdsOrClassesButton")
+  .addEventListener("click", () => {
+    options.excludeIdsOrClasses = [];
+    clearExcludeIdsOrClasses();
+    showExcludeIdsOrClasses();
+  });
+
 const loadOptions = async () => {
   try {
     return await browser.storage.local.get("options");
@@ -450,10 +650,24 @@ const initialize = async () => {
     options.skipClasses = [...optionsData.options.skipClasses];
   }
 
+  if (!optionsData?.options?.selectIdsOrClasses) {
+    options.selectIdsOrClasses = [];
+  } else {
+    options.selectIdsOrClasses = [...optionsData.options.selectIdsOrClasses];
+  }
+
+  if (!optionsData?.options?.excludeIdsOrClasses) {
+    options.excludeIdsOrClasses = [];
+  } else {
+    options.excludeIdsOrClasses = [...optionsData.options.excludeIdsOrClasses];
+  }
+
   showDefaultTags();
   showAutocomplete();
   showDictionalyTags();
   showSkipClasses();
+  showSelectIdsOrClasses();
+  showExcludeIdsOrClasses();
 };
 
 initialize();

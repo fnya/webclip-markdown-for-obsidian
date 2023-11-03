@@ -17,44 +17,38 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
 
     const skipClasses = [];
 
+    let targets = ["main", "Main", "article", "News", "news", "content", "day"];
+    let nagatives = [
+      "side",
+      "logo",
+      "menu",
+      "header",
+      "ranking",
+      "wrap",
+      "Wrapper",
+      "sub",
+      "widget",
+      "module",
+      "thumbnail",
+      "storycard",
+      "mhMain",
+      "voice",
+      "mainContentsStart",
+      "article_under_nllink",
+      "content-top-block",
+    ];
+
     const getCurrentElement = () => {
       if (isFullPage) {
         return document.body;
       }
+      const idNegative = nagatives
+        .map((nagative) => `:not([id*="${nagative}"])`)
+        .join("");
 
-      const idNegative =
-        ':not([id*="side"])' +
-        ':not([id*="logo"])' +
-        ':not([id*="menu"])' +
-        ':not([id*="header"])' +
-        ':not([id*="ranking"])' +
-        ':not([id*="wrap"])' +
-        ':not([id*="Wrapper"])' +
-        ':not([id*="sub"])' +
-        ':not([id*="widget"])' +
-        ':not([id*="module"])' +
-        ':not([id*="thumbnail"])' +
-        ':not([id*="storycard"])' +
-        ':not([id*="mhMain"])' +
-        ':not([id*="voice"])' +
-        ':not([id*="mainContentsStart"])';
-
-      const classNegative =
-        ':not([class*="side"])' +
-        ':not([class*="logo"])' +
-        ':not([class*="menu"])' +
-        ':not([class*="header"])' +
-        ':not([class*="ranking"])' +
-        ':not([class*="wrap"])' +
-        ':not([class*="Wrapper"])' +
-        ':not([class*="sub"])' +
-        ':not([class*="widget"])' +
-        ':not([class*="module"])' +
-        ':not([class*="thumbnail"])' +
-        ':not([class*="storycard"])' +
-        ':not([class*="mhMain"])' +
-        ':not([class*="voice"])' +
-        ':not([class*="mainContentsStart"])';
+      const classNegative = nagatives
+        .map((nagative) => `:not([class*="${nagative}"])`)
+        .join("");
 
       const excludeTags =
         ":not(script)" +
@@ -64,66 +58,34 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
         ":not(nav)" +
         ":not(head)";
 
-      let elements = document.querySelectorAll(
-        '[id*="main"]' + idNegative + excludeTags
-      );
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[id*="Main"]' + idNegative + excludeTags
-        );
+      let elements;
+
+      for (const target of targets) {
+        if (!elements || elements.length === 0) {
+          const selector = `[id*=${target}]` + idNegative + excludeTags;
+          elements = document.querySelectorAll(selector);
+
+          if (elements && elements.length > 0) {
+            break;
+          }
+        }
       }
+
       if (!elements || elements.length === 0) {
         elements = document.querySelectorAll(
           "article" + classNegative + excludeTags
         );
       }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[class*="main"]' + classNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          "main" + classNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[id*="article"]' + idNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[id*="News"]' + idNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[id*="news"]' + idNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[id*="content"]' + idNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[class*="News"]' + classNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[class*="news"]' + classNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          '[class*="content"]' + classNegative + excludeTags
-        );
-      }
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll('[class*="day"]');
+
+      for (const target of targets) {
+        if (!elements || elements.length === 0) {
+          const selector = `[class*=${target}]` + classNegative + excludeTags;
+          elements = document.querySelectorAll(selector);
+
+          if (elements && elements.length > 0) {
+            break;
+          }
+        }
       }
 
       if (elements && elements.length > 0) {
