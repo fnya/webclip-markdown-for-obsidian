@@ -17,7 +17,16 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
 
     const skipClasses = [];
 
-    let targets = ["main", "Main", "article", "News", "news", "content", "day"];
+    let targets = [
+      "main",
+      "Main",
+      "article",
+      "News",
+      "news",
+      "content",
+      "day",
+      "detail_area",
+    ];
     let nagatives = [
       "side",
       "logo",
@@ -39,11 +48,13 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
       "main_topics",
       "article_body",
     ];
+    const targetTags = ["main", "article"];
 
     const getCurrentElement = () => {
       if (isFullPage) {
         return document.body;
       }
+
       const idNegative = nagatives
         .map((nagative) => `:not([id*="${nagative}"])`)
         .join("");
@@ -58,40 +69,44 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
         ":not(ul)" +
         ":not(li)" +
         ":not(nav)" +
-        ":not(head)";
+        ":not(head)" +
+        ":not(body)";
 
-      let elements;
+      let elements = [];
 
       for (const target of targets) {
-        if (!elements || elements.length === 0) {
-          const selector = `[id*=${target}]` + idNegative + excludeTags;
+        if (elements.length === 0) {
+          const selector =
+            `[id*="${target}"]` + idNegative + classNegative + excludeTags;
           elements = document.querySelectorAll(selector);
 
-          if (elements && elements.length > 0) {
-            break;
+          if (elements.length > 0) {
+            return elements[0];
           }
         }
       }
 
-      if (!elements || elements.length === 0) {
-        elements = document.querySelectorAll(
-          "article" + classNegative + excludeTags
-        );
-      }
+      for (const target of targetTags) {
+        if (elements.length === 0) {
+          elements = document.querySelectorAll(
+            target + classNegative + excludeTags
+          );
 
-      for (const target of targets) {
-        if (!elements || elements.length === 0) {
-          const selector = `[class*=${target}]` + classNegative + excludeTags;
-          elements = document.querySelectorAll(selector);
-
-          if (elements && elements.length > 0) {
-            break;
+          if (elements.length > 0) {
+            return elements[0];
           }
         }
       }
 
-      if (elements && elements.length > 0) {
-        return elements[0];
+      for (const target of targets) {
+        if (elements.length === 0) {
+          const selector = `[class*="${target}"]` + classNegative + excludeTags;
+          elements = document.querySelectorAll(selector);
+
+          if (elements.length > 0) {
+            return elements[0];
+          }
+        }
       }
 
       return document.body;

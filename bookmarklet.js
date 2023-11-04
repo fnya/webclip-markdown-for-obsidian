@@ -5,10 +5,10 @@ javascript: Promise.all([
   const isFullPage = false;
 
   /* Optional vault name */
-  const vault = "plugins";
+  const vault = "";
 
   /* Optional folder name such as "Clippings" */
-  const folder = "test";
+  const folder = "";
 
   /* Optional default tags such as "tag1 tag2" */
   /* Numeric-only tags will not work due to Obsidian specifications.*/
@@ -18,7 +18,16 @@ javascript: Promise.all([
 
   const comment = "";
 
-  let targets = ["main", "Main", "article", "News", "news", "content", "day"];
+  let targets = [
+    "main",
+    "Main",
+    "article",
+    "News",
+    "news",
+    "content",
+    "day",
+    "detail_area",
+  ];
   let nagatives = [
     "side",
     "logo",
@@ -40,6 +49,7 @@ javascript: Promise.all([
     "main_topics",
     "article_body",
   ];
+  const targetTags = ["main", "article"];
 
   const getCurrentElement = () => {
     if (isFullPage) {
@@ -60,40 +70,44 @@ javascript: Promise.all([
       ":not(ul)" +
       ":not(li)" +
       ":not(nav)" +
-      ":not(head)";
+      ":not(head)" +
+      ":not(body)";
 
-    let elements;
+    let elements = [];
 
     for (const target of targets) {
-      if (!elements || elements.length === 0) {
-        const selector = `[id*=${target}]` + idNegative + excludeTags;
+      if (elements.length === 0) {
+        const selector =
+          `[id*="${target}"]` + idNegative + classNegative + excludeTags;
         elements = document.querySelectorAll(selector);
 
-        if (elements && elements.length > 0) {
-          break;
+        if (elements.length > 0) {
+          return elements[0];
         }
       }
     }
 
-    if (!elements || elements.length === 0) {
-      elements = document.querySelectorAll(
-        "article" + classNegative + excludeTags
-      );
-    }
+    for (const target of targetTags) {
+      if (elements.length === 0) {
+        elements = document.querySelectorAll(
+          target + classNegative + excludeTags
+        );
 
-    for (const target of targets) {
-      if (!elements || elements.length === 0) {
-        const selector = `[class*=${target}]` + classNegative + excludeTags;
-        elements = document.querySelectorAll(selector);
-
-        if (elements && elements.length > 0) {
-          break;
+        if (elements.length > 0) {
+          return elements[0];
         }
       }
     }
 
-    if (elements && elements.length > 0) {
-      return elements[0];
+    for (const target of targets) {
+      if (elements.length === 0) {
+        const selector = `[class*="${target}"]` + classNegative + excludeTags;
+        elements = document.querySelectorAll(selector);
+
+        if (elements.length > 0) {
+          return elements[0];
+        }
+      }
     }
 
     return document.body;
@@ -250,9 +264,7 @@ javascript: Promise.all([
   turndownService.addRule("pictureTagsReplace", {
     filter: ["picture"],
     replacement: (content, node) => {
-      console.log("picture");
       const sourceNodes = node.querySelector("source[type='image/jpg']");
-      console.log(sourceNodes);
       if (sourceNodes && sourceNodes.length > 0) {
         const imgae = getImageInfomaion(sourceNodes[0]);
         const width = getImageWidth(sourceNodes[0]);

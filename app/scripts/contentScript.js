@@ -1,7 +1,16 @@
 const selectedBorderStyle = "solid 5px blue";
 let currentElement;
 let skipClasses = [];
-let targets = ["main", "Main", "article", "News", "news", "content", "day"];
+let targets = [
+  "main",
+  "Main",
+  "article",
+  "News",
+  "news",
+  "content",
+  "day",
+  "detail_area",
+];
 let nagatives = [
   "side",
   "logo",
@@ -21,6 +30,7 @@ let nagatives = [
   "article_under_nllink",
   "content-top-block",
 ];
+const targetTags = ["main", "article"];
 
 const plus = () => {
   if (currentElement && currentElement.parentElement !== document.body) {
@@ -424,43 +434,44 @@ const getCurrentElement = () => {
     ":not(ul)" +
     ":not(li)" +
     ":not(nav)" +
-    ":not(head)";
+    ":not(head)" +
+    ":not(body)";
 
-  let elements;
+  let elements = [];
 
-  // select ids
   for (const target of targets) {
-    if (!elements || elements.length === 0) {
-      const selector = `[id*=${target}]` + idNegative + excludeTags;
+    if (elements.length === 0) {
+      const selector =
+        `[id*="${target}"]` + idNegative + classNegative + excludeTags;
       elements = document.querySelectorAll(selector);
 
-      if (elements && elements.length > 0) {
-        break;
+      if (elements.length > 0) {
+        return elements[0];
       }
     }
   }
 
-  // select article
-  if (!elements || elements.length === 0) {
-    elements = document.querySelectorAll(
-      "article" + classNegative + excludeTags
-    );
-  }
+  for (const target of targetTags) {
+    if (elements.length === 0) {
+      elements = document.querySelectorAll(
+        target + classNegative + excludeTags
+      );
 
-  // select classes
-  for (const target of targets) {
-    if (!elements || elements.length === 0) {
-      const selector = `[class*=${target}]` + classNegative + excludeTags;
-      elements = document.querySelectorAll(selector);
-
-      if (elements && elements.length > 0) {
-        break;
+      if (elements.length > 0) {
+        return elements[0];
       }
     }
   }
 
-  if (elements && elements.length > 0) {
-    return elements[0];
+  for (const target of targets) {
+    if (elements.length === 0) {
+      const selector = `[class*="${target}"]` + classNegative + excludeTags;
+      elements = document.querySelectorAll(selector);
+
+      if (elements.length > 0) {
+        return elements[0];
+      }
+    }
   }
 
   return document.body;
