@@ -37,6 +37,8 @@ javascript: Promise.all([
     "mainContentsStart",
     "article_under_nllink",
     "content-top-block",
+    "main_topics",
+    "article_body",
   ];
 
   const getCurrentElement = () => {

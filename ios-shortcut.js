@@ -36,6 +36,8 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
       "mainContentsStart",
       "article_under_nllink",
       "content-top-block",
+      "main_topics",
+      "article_body",
     ];
 
     const getCurrentElement = () => {
