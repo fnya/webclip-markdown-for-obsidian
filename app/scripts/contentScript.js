@@ -27,8 +27,35 @@ let nagatives = [
   "mhMain",
   "voice",
   "mainContentsStart",
-  "article_under_nllink",
-  "content-top-block",
+  "link",
+  "block",
+  "icon",
+  "ad",
+  "css",
+  "promo",
+  "skip",
+  "jump",
+  "img",
+  "inner",
+  "list",
+  "banner",
+  "native",
+  "recommend",
+  "personal",
+  "embed",
+  "related",
+  "body",
+  "timeseries",
+  "pc",
+  "ftc",
+  "pickup",
+  "topic",
+  "nav",
+  "inline",
+  "more",
+  "vt",
+  "page",
+  "mms",
 ];
 const targetTags = ["main", "article"];
 
@@ -521,6 +548,9 @@ const selectAll = () => {
 const selectArticle = () => {
   currentElement.style.border = "";
   currentElement = getCurrentElement();
+
+  console.log(currentElement);
+
   currentElement.style.border = selectedBorderStyle;
 };
 
