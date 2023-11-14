@@ -346,9 +346,6 @@ javascript: Promise.all([
           const width = getImageWidth(image);
 
           if (width) {
-            response += `\n![${imageInformation.alt}|${width}](${getCorrectUrl(
-              imageInformation.imageUrl
-            )})\n`;
             if (imageInformation.alt) {
               response += `\n![${
                 imageInformation.alt

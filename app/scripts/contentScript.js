@@ -342,6 +342,7 @@ const clip = async (message) => {
 
       let response = "";
       const images = node.querySelectorAll("img");
+
       if (images && images.length > 0) {
         images.forEach((image) => {
           if (image.attributes["loading"]) {
@@ -352,9 +353,6 @@ const clip = async (message) => {
           const width = getImageWidth(image);
 
           if (width) {
-            response += `\n![${imageInformation.alt}|${width}](${getCorrectUrl(
-              imageInformation.imageUrl
-            )})\n`;
             if (imageInformation.alt) {
               response += `\n![${
                 imageInformation.alt

@@ -349,9 +349,6 @@ Promise.all([import("https://unpkg.com/turndown@7.1.2?module")]).then(
             const width = getImageWidth(image);
 
             if (width) {
-              response += `\n![${
-                imageInformation.alt
-              }|${width}](${getCorrectUrl(imageInformation.imageUrl)})\n`;
               if (imageInformation.alt) {
                 response += `\n![${
                   imageInformation.alt
