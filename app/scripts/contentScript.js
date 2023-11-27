@@ -289,30 +289,6 @@ const clip = async (message) => {
     },
   });
 
-  turndownService.addRule("pictureTagsReplace", {
-    filter: ["picture"],
-    replacement: (content, node) => {
-      console.log("picture");
-      const sourceNodes = node.querySelector("source[type='image/jpg']");
-      console.log(sourceNodes);
-      if (sourceNodes && sourceNodes.length > 0) {
-        const imgae = getImageInfomaion(sourceNodes[0]);
-        const width = getImageWidth(sourceNodes[0]);
-
-        if (width) {
-          return `![${node.alt}|${width}](${getCorrectUrl(imgae.imageUrl)})`;
-        }
-        if (imgae.alt) {
-          return `![${node.alt}](${getCorrectUrl(imgae.imageUrl)})`;
-        }
-
-        return `![image](${getCorrectUrl(imgae.imageUrl)})`;
-      }
-
-      return "";
-    },
-  });
-
   // https://github.com/mixmark-io/turndown/issues/241
   turndownService.addRule("imageTagsReplace", {
     filter: ["img"],
@@ -429,6 +405,10 @@ const clip = async (message) => {
 };
 
 const getCorrectUrl = (url) => {
+  if (!url) {
+    return "";
+  }
+
   let correctUrl = url;
   const siteUrl = new URL(document.URL);
 
@@ -546,9 +526,6 @@ const selectAll = () => {
 const selectArticle = () => {
   currentElement.style.border = "";
   currentElement = getCurrentElement();
-
-  console.log(currentElement);
-
   currentElement.style.border = selectedBorderStyle;
 };
 

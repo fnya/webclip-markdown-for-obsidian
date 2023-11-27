@@ -194,6 +194,10 @@ javascript: Promise.all([
   };
 
   const getCorrectUrl = (url) => {
+    if (!url) {
+      return "";
+    }
+
     let correctUrl = url;
     const siteUrl = new URL(document.URL);
 
@@ -280,28 +284,6 @@ javascript: Promise.all([
         node.attributes["data-tweet-id"]
       ) {
         return `![][https://twitter.com/i/web/status/${node.attributes["data-tweet-id"].value}]`;
-      }
-
-      return "";
-    },
-  });
-
-  turndownService.addRule("pictureTagsReplace", {
-    filter: ["picture"],
-    replacement: (content, node) => {
-      const sourceNodes = node.querySelector("source[type='image/jpg']");
-      if (sourceNodes && sourceNodes.length > 0) {
-        const imgae = getImageInfomaion(sourceNodes[0]);
-        const width = getImageWidth(sourceNodes[0]);
-
-        if (width) {
-          return `![${node.alt}|${width}](${getCorrectUrl(imgae.imageUrl)})`;
-        }
-        if (imgae.alt) {
-          return `![${node.alt}](${getCorrectUrl(imgae.imageUrl)})`;
-        }
-
-        return `![image](${getCorrectUrl(imgae.imageUrl)})`;
       }
 
       return "";
